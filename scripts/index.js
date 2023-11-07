@@ -178,12 +178,13 @@ function animate() {
                     rectangle1: player,
                     rectangle2: {...boundary, position: {
                         x: boundary.position.x,
-                        y: boundary.position.y + 3
+                        y: boundary.position.y
                     }}
                 })
-            )
-            moving = false;
-            break;
+            ){
+                moving = false;
+                break;
+            }
         }
         if (moving) {
             movables.forEach(movable => movable.position.y += 4)
