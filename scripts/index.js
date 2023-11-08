@@ -1,19 +1,13 @@
 "use strict";
 
-//initialize game canvas and context
+//initialize game canvas and context-----------
 const canvas = $('#gameCanvas')[0];
 const context = canvas.getContext('2d');
 
 canvas.width = 1024;
 canvas.height = 576;
 
-//create collisions map
-const collisionsMap = [];
-for (let i = 0; i < collisions.length; i+=100){
-    collisionsMap.push(collisions.slice(i, 100 + i));
-};
-
-//CLASS CREATION
+//CLASS CREATION-------------------------------
 class Boundary {
     static width = 64;
     static height = 64;
@@ -24,7 +18,7 @@ class Boundary {
     }
 
     draw() {
-        context.fillStyle = 'red';
+        context.fillStyle = 'rgba(255, 0, 0, 0)';
         context.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 }
@@ -55,19 +49,20 @@ class Sprite {
         );
     }
 }
+//----------------------------------------
 
-
-
-
-
-
-
-const boundaries = [];
 const offset = {
     x: -544,
     y: -2750
 }
 
+//create collisions map for boundaries -------------
+const collisionsMap = [];
+for (let i = 0; i < collisions.length; i+=100){
+    collisionsMap.push(collisions.slice(i, 100 + i));
+};
+
+const boundaries = [];
 collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
         if (symbol === 21856) {
@@ -79,9 +74,12 @@ collisionsMap.forEach((row, i) => {
     }})
 })
 
-// Create Image objects for the background and player
+// Create Image objects for the background, player, foreground
 const image = new Image();
 image.src = '../images/Mavis-Island.png';
+
+const foregroundImage = new Image();
+foregroundImage.src = '../images/Foreground-Layers.png'
 
 const playerImage = new Image();
 playerImage.src = '../images/MM-Protagonist.png';
@@ -93,12 +91,6 @@ image.onload = function () {
         animate();
     };
 };
-
-//background sprite
-const background = new Sprite({
-    position: { x: offset.x, y: offset.y },
-    image: image,
-});
 
 //player sprite
 const player = new Sprite({
@@ -115,10 +107,16 @@ const player = new Sprite({
     height: playerImage.height / 20,
 });
 
+//background sprite
+const background = new Sprite({
+    position: { x: offset.x, y: offset.y },
+    image: image,
+});
+
 //foreground sprite
 const foreground = new Sprite({
     position: { x: offset.x, y: offset.y },
-    image: image,
+    image: foregroundImage,
 });
 
 const keys = {
@@ -136,11 +134,10 @@ const keys = {
     }
 }
 
-const step = 16/3;
 const interval = 500;
 let playerMovementInterval;
 
-const movables = [background, ...boundaries];
+const movables = [background, foreground, ...boundaries];
 
 //collision function
 function rectangularCollision({rectangle1, rectangle2}){
@@ -160,6 +157,8 @@ function animate() {
         boundary.draw();
     });
     player.draw();
+    foreground.draw();
+
     let moving = true;
     if (keys.arrowUp.pressed && lastKey === 'ArrowUp') {
         for (let i = 0; i < boundaries.length; i++){
