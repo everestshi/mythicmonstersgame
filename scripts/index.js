@@ -33,6 +33,7 @@ class Sprite {
         this.srcHeight = srcHeight || image.height;
         this.width = width || this.srcWidth;
         this.height = height || this.srcHeight;
+        this.moving = false;
     }
 
     draw() {
@@ -134,9 +135,6 @@ const keys = {
     }
 }
 
-const interval = 500;
-let playerMovementInterval;
-
 const movables = [background, foreground, ...boundaries];
 
 //collision function
@@ -149,8 +147,57 @@ function rectangularCollision({rectangle1, rectangle2}){
     )
 };
 
+
+
+// Define sprite frames for player directions
+const playerFrames = {
+    up: [
+        { image: playerImage, srcX: playerImage.width / 56, srcY: playerImage.height / 120, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Static frame
+        { image: playerImage, srcX: playerImage.width / 56 * 7, srcY: playerImage.height / 120 * 13, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // First movement frame
+        { image: playerImage, srcX: playerImage.width / 56, srcY: playerImage.height / 120, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20}, // Static frame
+        { image: playerImage, srcX: playerImage.width / 56 * 10, srcY: playerImage.height / 120 * 13, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Second movement frame        // Add movement frames
+    ],
+    down: [
+        { image: playerImage, srcX: playerImage.width / 56 * 3, srcY: playerImage.height / 120, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Static frame
+        { image: playerImage, srcX: playerImage.width / 56 * 19, srcY: playerImage.height / 120 * 13, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // First movement frame
+        { image: playerImage, srcX: playerImage.width / 56 * 3, srcY: playerImage.height / 120, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Static frame
+        { image: playerImage, srcX: playerImage.width / 56 * 22, srcY: playerImage.height / 120 * 13, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Second movement frame
+    ],
+    left: [
+        { image: playerImage, srcX: playerImage.width / 56 * 2, srcY: playerImage.height / 120, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Static frame
+        { image: playerImage, srcX: playerImage.width / 56 * 13, srcY: playerImage.height / 120 * 13, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // First movement frame
+        { image: playerImage, srcX: playerImage.width / 56 * 2, srcY: playerImage.height / 120, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Static frame
+        { image: playerImage, srcX: playerImage.width / 56 * 16, srcY: playerImage.height / 120 * 13, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Second movement frame        // Add movement frames
+    ],
+    right: [
+        { image: playerImage, srcX: 0, srcY: playerImage.height / 120, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Static frame
+        { image: playerImage, srcX: playerImage.width / 56, srcY: playerImage.height / 120 * 13, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // First movement frame
+        { image: playerImage, srcX: 0, srcY: playerImage.height / 120, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Static frame
+        { image: playerImage, srcX: playerImage.width / 56 * 4, srcY: playerImage.height / 120 * 13, srcWidth: playerImage.width / 56, srcHeight: playerImage.height / 20 }, // Second movement frame        // Add movement frames
+    ],
+};
+
+// Initialize player direction and frame index
+let playerDirection = 'down'; // Set the default direction
+let frameIndex = 0; // Current frame index
+const frameDelay = 30; // Delay between frame changes
+let lastFrameTime = 0; // Variable to keep track of the last frame time
+
+
+// Update player sprite based on direction and frame index
+function updatePlayerSprite() {
+    const currentFrames = playerFrames[playerDirection];
+    const frame = currentFrames[frameIndex];
+    player.srcX = frame.srcX;
+    player.srcY = frame.srcY;
+    player.srcWidth = frame.srcWidth;
+    player.srcHeight = frame.srcHeight;
+}
+
+
 //animation loop
 function animate() {
+    //draw sprites
     window.requestAnimationFrame(animate);
     background.draw();
     boundaries.forEach(boundary => {
@@ -159,8 +206,11 @@ function animate() {
     player.draw();
     foreground.draw();
 
+    //player movement
     let moving = true;
+    player.moving = false;
     if (keys.arrowUp.pressed && lastKey === 'ArrowUp') {
+        player.moving = true;
         for (let i = 0; i < boundaries.length; i++){
             const boundary = boundaries[i];
             if (
@@ -177,9 +227,10 @@ function animate() {
             }
         }
         if (moving) {
-            movables.forEach(movable => movable.position.y += 4)
+            movables.forEach(movable => movable.position.y += 3)
         }
     } else if (keys.arrowRight.pressed && lastKey === 'ArrowRight') {
+        player.moving = true;
         for (let i = 0; i < boundaries.length; i++){
             const boundary = boundaries[i];
             if (
@@ -196,9 +247,10 @@ function animate() {
             }
         }
         if (moving) {
-            movables.forEach(movable => movable.position.x -= 4)
+            movables.forEach(movable => movable.position.x -= 3)
         }
     } else if (keys.arrowDown.pressed && lastKey === 'ArrowDown') {
+        player.moving = true;
         for (let i = 0; i < boundaries.length; i++){
             const boundary = boundaries[i];
             if (
@@ -215,9 +267,10 @@ function animate() {
             }
         }
         if (moving) {
-            movables.forEach(movable => movable.position.y -= 4)
+            movables.forEach(movable => movable.position.y -= 3)
         }
     } else if (keys.arrowLeft.pressed && lastKey === 'ArrowLeft') {
+        player.moving = true;
         for (let i = 0; i < boundaries.length; i++){
             const boundary = boundaries[i];
             if (
@@ -234,30 +287,56 @@ function animate() {
             }
         }
         if (moving) {
-            movables.forEach(movable => movable.position.x += 4)
+            movables.forEach(movable => movable.position.x += 3)
         }
+    };
+
+    if (player.moving){
+        // Update player sprite based on direction and frame index
+        updatePlayerSprite();
+
+        lastFrameTime++
+
+        if (lastFrameTime % frameDelay === 0){
+            // Update frame index (to animate)
+            if (frameIndex < playerFrames[playerDirection].length - 1) {
+                frameIndex++;
+            } else {
+                frameIndex = 0; // Reset to the first frame
+            }
+        }
+    } else {
+        // Reset frameIndex when not moving
+        frameIndex = 0;
+        updatePlayerSprite();
     }
 };
 
+
+//player input
 let lastKey = '';
 $(document).keydown(function(event) {
     console.log(event.key);
     switch (event.key) {
         case 'ArrowUp':
-            keys.arrowUp.pressed = true
-            lastKey = 'ArrowUp'
+            keys.arrowUp.pressed = true;
+            lastKey = 'ArrowUp';
+            playerDirection = 'up'; // Set player direction to up
             break;
         case 'ArrowRight':
-            keys.arrowRight.pressed = true
-            lastKey = 'ArrowRight'
+            keys.arrowRight.pressed = true;
+            lastKey = 'ArrowRight';
+            playerDirection = 'right'; // Set player direction to right
             break;
         case 'ArrowDown':
-            keys.arrowDown.pressed = true
-            lastKey = 'ArrowDown'
+            keys.arrowDown.pressed = true;
+            lastKey = 'ArrowDown';
+            playerDirection = 'down'; // Set player direction to down
             break;
         case 'ArrowLeft':
-            keys.arrowLeft.pressed = true
-            lastKey = 'ArrowLeft'
+            keys.arrowLeft.pressed = true;
+            lastKey = 'ArrowLeft';
+            playerDirection = 'left'; // Set player direction to left
             break;
     }
 }).keyup(function(event) {
