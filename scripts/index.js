@@ -18,7 +18,7 @@ class Boundary {
     }
 
     draw() {
-        context.fillStyle = 'rgba(255, 0, 0, 0)';
+        context.fillStyle = 'rgba(255, 0, 0, 0.5)';
         context.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 }
@@ -74,6 +74,26 @@ collisionsMap.forEach((row, i) => {
         }))
     }})
 })
+
+//create battlezones map -----------------------------
+const battleZonesMap = [];
+for (let i = 0; i < battleZonesData.length; i+=100){
+    battleZonesMap.push(battleZonesData.slice(i, 100 + i));
+};
+
+const battleZones = [];
+battleZonesMap.forEach((row, i) => {
+    row.forEach((symbol, j) => {
+        if (symbol === 21856) {
+            battleZones.push(new Boundary({position: {
+                x: j * Boundary.width + offset.x,
+                y: i * Boundary.height + offset.y
+            }
+        }))
+    }})
+})
+
+console.log(battleZones)
 
 // Create Image objects for the background, player, foreground
 const image = new Image();
@@ -135,7 +155,7 @@ const keys = {
     }
 }
 
-const movables = [background, foreground, ...boundaries];
+const movables = [background, foreground, ...boundaries, ...battleZones];
 
 //collision function
 function rectangularCollision({rectangle1, rectangle2}){
@@ -203,12 +223,34 @@ function animate() {
     boundaries.forEach(boundary => {
         boundary.draw();
     });
+    battleZones.forEach(battleZone => {
+        battleZone.draw();
+    })
     player.draw();
     foreground.draw();
+
+    //battlezone detection
+    if (keys.arrowDown.pressed || keys.arrowLeft.pressed || keys.arrowRight.pressed || keys.arrowUp.pressed){
+        for (let i = 0; i < battleZones.length; i++){
+            const battleZone = battleZones[i];
+            if (
+                rectangularCollision({
+                    rectangle1: player,
+                    rectangle2: battleZone
+                }) &&
+                (Math.random() < 0.005)
+            ){
+                console.log("battlezone collision")
+                break;
+            }
+        }
+    }
 
     //player movement
     let moving = true;
     player.moving = false;
+
+    //player moving up
     if (keys.arrowUp.pressed && lastKey === 'ArrowUp') {
         player.moving = true;
         for (let i = 0; i < boundaries.length; i++){
@@ -226,6 +268,7 @@ function animate() {
                 break;
             }
         }
+
         if (moving) {
             movables.forEach(movable => movable.position.y += 3)
         }
