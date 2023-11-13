@@ -7,51 +7,6 @@ const context = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 576;
 
-//CLASS CREATION-------------------------------
-class Boundary {
-    static width = 64;
-    static height = 64;
-    constructor({position}) {
-        this.position = position
-        this.width = 64
-        this.height = 64
-    }
-
-    draw() {
-        context.fillStyle = 'rgba(255, 0, 0, 0.5)';
-        context.fillRect(this.position.x, this.position.y, this.width, this.height);
-    }
-}
-
-class Sprite {
-    constructor({ position, image, srcX, srcY, srcWidth, srcHeight, width, height }) {
-        this.position = position;
-        this.image = image;
-        this.srcX = srcX || 0;
-        this.srcY = srcY || 0;
-        this.srcWidth = srcWidth || image.width;
-        this.srcHeight = srcHeight || image.height;
-        this.width = width || this.srcWidth;
-        this.height = height || this.srcHeight;
-        this.moving = false;
-    }
-
-    draw() {
-        context.drawImage(
-            this.image,
-            this.srcX,
-            this.srcY,
-            this.srcWidth,
-            this.srcHeight,
-            this.position.x,
-            this.position.y,
-            this.width,
-            this.height
-        );
-    }
-}
-//----------------------------------------
-
 const offset = {
     x: -544,
     y: -2750
@@ -93,9 +48,7 @@ battleZonesMap.forEach((row, i) => {
     }})
 })
 
-console.log(battleZones)
-
-// Create Image objects for the background, player, foreground
+// Create Image objects for the background, foreground, player
 const image = new Image();
 image.src = '../images/Mavis-Island.png';
 
@@ -104,14 +57,6 @@ foregroundImage.src = '../images/Foreground-Layers.png'
 
 const playerImage = new Image();
 playerImage.src = '../images/MM-Protagonist.png';
-
-// Wait for both images to load
-image.onload = function () {
-    playerImage.onload = function () {
-        // Both images have loaded, start the animation loop
-        animate();
-    };
-};
 
 //player sprite
 const player = new Sprite({
@@ -214,22 +159,36 @@ function updatePlayerSprite() {
     player.srcHeight = frame.srcHeight;
 }
 
+//battle object
+const battle = {
+    initiated: false
+}
 
 //animation loop
 function animate() {
     //draw sprites
-    window.requestAnimationFrame(animate);
+    const animationId = window.requestAnimationFrame(animate);
     background.draw();
     boundaries.forEach(boundary => {
         boundary.draw();
     });
     battleZones.forEach(battleZone => {
         battleZone.draw();
-    })
+    });
     player.draw();
     foreground.draw();
 
-    //battlezone detection
+
+    //player movement
+    let moving = true;
+    player.moving = false;
+
+    //if battle initiates, don't call the below
+    if (battle.initiated) {
+        return
+    }
+
+    //activate battle
     if (keys.arrowDown.pressed || keys.arrowLeft.pressed || keys.arrowRight.pressed || keys.arrowUp.pressed){
         for (let i = 0; i < battleZones.length; i++){
             const battleZone = battleZones[i];
@@ -240,15 +199,38 @@ function animate() {
                 }) &&
                 (Math.random() < 0.005)
             ){
-                console.log("battlezone collision")
+                frameIndex = 0;
+                updatePlayerSprite();
+                console.log("activate battle")
+
+                //deactivate current animation loop
+                window.cancelAnimationFrame(animationId);
+
+                battle.initiated = true;
+                gsap.to('#battleTransition', {
+                    opacity: 1,
+                    repeat: 3,
+                    yoyo: true,
+                    duration: 0.4,
+                    onComplete(){
+                        gsap.to('#battleTransition', {
+                            opacity: 1,
+                            duration: 0.4,
+                            onComplete() {
+                                //activate new animation loop
+                                animateBattle()
+                                gsap.to('#battleTransition', {
+                                    opacity: 0,
+                                    duration: 0.4
+                                })
+                            }
+                        })
+                    }
+                })
                 break;
             }
         }
     }
-
-    //player movement
-    let moving = true;
-    player.moving = false;
 
     //player moving up
     if (keys.arrowUp.pressed && lastKey === 'ArrowUp') {
@@ -355,6 +337,13 @@ function animate() {
     }
 };
 
+// Wait for images to load NEED TO ADD FOREGROUND AND BOUNDARY
+image.onload = function () {
+    playerImage.onload = function () {
+        // Both images have loaded, start the animation loop
+        //animate();
+    };
+};
 
 //player input
 let lastKey = '';

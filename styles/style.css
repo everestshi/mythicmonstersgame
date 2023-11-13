@@ -6,8 +6,135 @@ html {
 
 *, *:before, *:after {
     box-sizing: inherit;
+    font-family: 'Press Start 2P', cursive;
   }
 
 body {
     background-color: black;
+}
+
+#gameScreen {
+  display: inline-block;
+  position: relative;
+}
+
+#battleTransition {
+  background-color: black;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#healthBar{
+  position: relative;
+}
+
+#enemyBattleInfo {
+  background-color: white;
+  position: absolute;
+  width: 300px;
+  top: 50px;
+  left: 50px;
+  border: 4px black solid;
+  padding: 12px;
+}
+
+#enemyBaseHealth {
+  height: 5px;
+  background-color: grey;
+  margin-top: 10px;
+}
+
+#enemyCurrentHealth {
+  height: 5px;
+  background-color: green;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+#myBattleInfo {
+  background-color: white;
+  position: absolute;
+  width: 300px;
+  top: 330px;
+  right: 50px;
+  border: 4px black solid;
+  padding: 12px;
+}
+
+#myBaseHealth {
+  height: 5px;
+  background-color: grey;
+  margin-top: 10px;
+}
+
+#myCurrentHealth {
+  height: 5px;
+  background-color: green;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+#battleMoveSelection {
+  background-color: white;
+  position: absolute;
+  display: flex;
+  height: 125px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 10px;
+  border: 4px black solid;
+}
+
+#battleDialogue {
+  background-color: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 12px;
+  display: none;
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  background-color: white;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: rgb(217, 217, 217);
+}
+
+#attacks{
+  width: 66.66%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+#attackType{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33.33%;
+  border-left: 4px black solid;
 }
