@@ -218,7 +218,8 @@ function animate() {
                             duration: 0.4,
                             onComplete() {
                                 //activate new animation loop
-                                animateBattle()
+                                initBattle();
+                                animateBattle();
                                 gsap.to('#battleTransition', {
                                     opacity: 0,
                                     duration: 0.4
@@ -341,7 +342,7 @@ function animate() {
 image.onload = function () {
     playerImage.onload = function () {
         // Both images have loaded, start the animation loop
-        //animate();
+        animate();
     };
 };
 

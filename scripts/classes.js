@@ -65,6 +65,18 @@ class Monster extends Sprite {
         this.name = name,
         this.health = 100,
         this.attacks = attacks
+        if (this.isEnemy) {
+            // Set the position for enemies
+            this.position = {
+                x: 665,
+                y: 140
+            }
+        } else {
+            this.position = {
+                x: 235,
+                y: 315
+            }
+        }
     }
 
     attack({attack, recipient, renderedSprites}) {
@@ -75,7 +87,7 @@ class Monster extends Sprite {
         if (this.isEnemy) {
             healthBar = '#myCurrentHealth'
         }
-        this.health -= attack.damage
+        recipient.health -= attack.damage
 
 
         const tl = gsap.timeline()
@@ -93,7 +105,7 @@ class Monster extends Sprite {
             onComplete: () => {
                 //Enemy gets hit
                 gsap.to(healthBar, {
-                    width: this.health + '%'
+                    width: recipient.health + '%'
                 })
 
                 gsap.to(recipient.position, {
@@ -113,5 +125,15 @@ class Monster extends Sprite {
         }).to(this.position, {
             x: this.position.x
         })
+    }
+
+    faint() {
+        document.querySelector('#battleDialogue').innerHTML = this.name + ' has fainted!';
+        gsap.to(this.position, {
+            y: this.position.y + 20
+        })
+        gsap.to(this, {
+            opacity: 0
+        } )
     }
 }

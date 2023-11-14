@@ -12,29 +12,30 @@
 <body>
     <div id="gameScreen">
         <div id="battleTransition"></div>
-        <div id="enemyBattleInfo">
-            <h1>Skelleks</h1>
-            <div id="healthBar">
-                <div id="enemyBaseHealth"></div>
-                <div id="enemyCurrentHealth"></div>
-            </div>
-        </div>
-        <div id="myBattleInfo">
-            <h1>Lumini</h1>
-            <div id="healthBar">
-                <div id="myBaseHealth"></div>
-                <div id="myCurrentHealth"></div>
-            </div>
-        </div>
-
 
         <canvas id="gameCanvas"></canvas>
-
-        <div id="battleMoveSelection">
-            <div id="battleDialogue">Dialogue Box</div>
-            <div id="attacks"></div>
-            <div id="attackType">
-                <h1>Attack Type</h1>
+        
+        <div id="userInterface">
+            <div id="enemyBattleInfo">
+                <h1 id="enemyName"></h1>
+                <div id="healthBar">
+                    <div id="enemyBaseHealth"></div>
+                    <div id="enemyCurrentHealth"></div>
+                </div>
+            </div>
+            <div id="myBattleInfo">
+                <h1>Lumini</h1>
+                <div id="healthBar">
+                    <div id="myBaseHealth"></div>
+                    <div id="myCurrentHealth"></div>
+                </div>
+            </div>
+            <div id="battleMoveSelection">
+                <div id="battleDialogue">Dialogue Box</div>
+                <div id="attacks"></div>
+                <div id="attackType">
+                    <h1>Attack Type</h1>
+                </div>
             </div>
         </div>
     </div>
@@ -49,6 +50,7 @@
         integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" 
         crossorigin="anonymous">
     </script>
+    <script src="./data/audio.js"></script>
     <script src="./data/collisions.js"></script>
     <script src="./data/battleZones.js"></script>
     <script src="./data/attacks.js"></script>

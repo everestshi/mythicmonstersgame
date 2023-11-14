@@ -11,7 +11,7 @@ const attacks = {
     },
     Lightball: {
         name: 'Lightball',
-        damage: 25,
+        damage: 80,
         type: 'Light'
     }
 }
