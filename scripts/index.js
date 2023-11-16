@@ -59,7 +59,7 @@ const playerImage = new Image();
 playerImage.src = '../images/MM-Protagonist.png';
 
 //player sprite
-const player = new Sprite({
+const player = new Player({
     position: {
         x: canvas.width / 2 - 24,
         y: canvas.height / 2 - 60,
@@ -167,7 +167,6 @@ const battle = {
 //animation loop
 function animate() {
     //draw sprites
-    const animationId = window.requestAnimationFrame(animate);
     background.draw();
     boundaries.forEach(boundary => {
         boundary.draw();
@@ -336,11 +335,15 @@ function animate() {
         frameIndex = 0;
         updatePlayerSprite();
     }
+    const animationId = window.requestAnimationFrame(animate);
+
 };
 
 // Wait for images to load NEED TO ADD FOREGROUND AND BOUNDARY
 image.onload = function () {
+    console.log("image loaded")
     playerImage.onload = function () {
+        console.log("player loaded")
         // Both images have loaded, start the animation loop
         animate();
     };

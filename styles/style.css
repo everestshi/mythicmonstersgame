@@ -90,6 +90,33 @@ body {
   width: 100%;
 }
 
+#battleMenu {
+  background-color: white;
+  position: absolute;
+  display: flex;
+  height: 125px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 10px;
+  border: 4px black solid;
+  z-index: 2;
+}
+
+#battleQuestion{
+  flex: 1; 
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  border-right: 4px black solid;
+}
+
+#battleMenuButtons{
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
 #battleMoveSelection {
   background-color: white;
   position: absolute;
