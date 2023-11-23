@@ -110,8 +110,8 @@ class Monster extends Sprite {
     level,
     attacks,
     baseHealth,
-    //baseAttack,
-    //baseDefense,
+    baseAttack,
+    baseDefense,
     baseSpeed,
     //experience,
   }) {
@@ -128,11 +128,13 @@ class Monster extends Sprite {
     this.level = level;
     this.baseHealth = baseHealth;
     this.fullHealth = Math.floor(((2 * this.baseHealth) * this.level) / 100 + this.level + 10);
-    this.health = this.fullHealth;
+    this.baseAttack = baseAttack;
+    this.baseDefense = baseDefense;
     this.baseSpeed = baseSpeed;
 
-    //this.attack = attack;
-    //this.defense = defense;
+    this.health = this.fullHealth;
+    //this.attack = Math.floor(((2 * this.baseAttack) * this.level) / 100 + 5);
+    //this.defense = Math.floor(((2 * this.baseDefense) * this.level) / 100 + 5);
     this.speed = Math.floor((2 * this.baseSpeed * this.level) / 100 + 5);
 
     //this.experience = experience;
@@ -159,6 +161,9 @@ class Monster extends Sprite {
     const difference = Math.abs(newValue - currentValue);
     const direction = currentValue < newValue ? 1 : -1;
     const duration = 500; // Adjust this value for speed
+    console.log('New Value:', newValue);
+  console.log('Current Value:', currentValue);
+  console.log('Difference:', difference);
 
     let i = currentValue;
     const interval = setInterval(() => {
@@ -171,18 +176,28 @@ class Monster extends Sprite {
     }, duration / difference);
   }
 
-  attack({ attack, recipient, renderedSprites }) {
+  attack({ attack, recipient }) {
     document.querySelector("#battleDialogue").style.display = "block";
     document.querySelector("#battleDialogue").innerHTML =
       this.name + " used " + attack.name;
 
     let healthBar = this.isEnemy ? "#myCurrentHealth" : "#enemyCurrentHealth";
     const healthStat = "myHealthStat";
-    const damageTaken = attack.damage;
     const initialHealth = recipient.health;
-    const newHealth = Math.max(initialHealth - damageTaken, 0)
 
-    recipient.health -= attack.damage;
+    // Calculate attack and defense here
+    const attackerAttackStat = Math.floor(((2 * this.baseAttack) * this.level) / 100 + 5);
+    const defenderDefenseStat = Math.floor(((2 * recipient.baseDefense) * recipient.level) / 100 + 5);
+    const movePower = attack.damage;
+    //console.log('Attacker Attack Stat:', attackerAttackStat);
+    //console.log('Defender Defense Stat:', defenderDefenseStat);
+    //console.log('Move Power:', movePower);
+
+    const damage = Math.floor((((2 * this.level / 5 + 2) * attackerAttackStat * movePower / defenderDefenseStat) / 50) + 2);
+    console.log(damage);
+
+    recipient.health -= damage;
+    const newHealth = Math.max(initialHealth - damage, 0)
 
     const tl = gsap.timeline();
 
