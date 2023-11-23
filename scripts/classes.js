@@ -84,13 +84,13 @@ class Player extends Sprite {
 
   addToParty(monster) {
     if (this.party.length < 6) {
-        this.party.push(monster);
+      this.party.push(monster);
     }
   }
 
   removeFromParty(monsterName) {
     if (this.party.length > 1) {
-        this.party = this.party.filter((monster) => monster.name !== monsterName);
+      this.party = this.party.filter((monster) => monster.name !== monsterName);
     }
   }
 }
@@ -107,7 +107,13 @@ class Monster extends Sprite {
     height,
     isEnemy = false,
     name,
+    level,
     attacks,
+    baseHealth,
+    //baseAttack,
+    //baseDefense,
+    baseSpeed,
+    //experience,
   }) {
     super({
       position,
@@ -119,10 +125,21 @@ class Monster extends Sprite {
       width,
       height,
     });
-    (this.isEnemy = isEnemy),
-      (this.name = name),
-      (this.health = 100),
-      (this.attacks = attacks);
+    this.level = level;
+    this.baseHealth = baseHealth;
+    this.fullHealth = Math.floor(((2 * this.baseHealth) * this.level) / 100 + this.level + 10);
+    this.health = this.fullHealth;
+    this.baseSpeed = baseSpeed;
+
+    //this.attack = attack;
+    //this.defense = defense;
+    this.speed = Math.floor((2 * this.baseSpeed * this.level) / 100 + 5);
+
+    //this.experience = experience;
+    this.isEnemy = isEnemy;
+    this.name = name;
+    this.attacks = attacks;
+
     if (this.isEnemy) {
       // Set the position for enemies
       this.position = {
@@ -137,23 +154,39 @@ class Monster extends Sprite {
     }
   }
 
+  animateNumberChange(element, newValue) {
+    const currentValue = parseInt(element.textContent);
+    const difference = Math.abs(newValue - currentValue);
+    const direction = currentValue < newValue ? 1 : -1;
+    const duration = 500; // Adjust this value for speed
+
+    let i = currentValue;
+    const interval = setInterval(() => {
+      if (i === newValue) {
+        clearInterval(interval);
+        return;
+      }
+      i += direction;
+      element.textContent = i;
+    }, duration / difference);
+  }
+
   attack({ attack, recipient, renderedSprites }) {
     document.querySelector("#battleDialogue").style.display = "block";
     document.querySelector("#battleDialogue").innerHTML =
       this.name + " used " + attack.name;
 
-    let healthBar = "#enemyCurrentHealth";
-    if (this.isEnemy) {
-      healthBar = "#myCurrentHealth";
-    }
+    let healthBar = this.isEnemy ? "#myCurrentHealth" : "#enemyCurrentHealth";
+    const healthStat = "myHealthStat";
+    const damageTaken = attack.damage;
+    const initialHealth = recipient.health;
+    const newHealth = Math.max(initialHealth - damageTaken, 0)
+
     recipient.health -= attack.damage;
 
     const tl = gsap.timeline();
 
-    let movementDistance = 20;
-    if (this.isEnemy) {
-      movementDistance = -20;
-    }
+    let movementDistance = this.isEnemy ? -20 : 20;
 
     tl.to(this.position, {
       x: this.position.x - movementDistance,
@@ -162,9 +195,9 @@ class Monster extends Sprite {
         x: this.position.x + movementDistance * 2,
         duration: 0.1,
         onComplete: () => {
-          //Enemy gets hit
+          const healthPercentage = (recipient.health / recipient.fullHealth) * 100;
           gsap.to(healthBar, {
-            width: recipient.health + "%",
+            width: healthPercentage + "%",
           });
 
           gsap.to(recipient.position, {
@@ -180,12 +213,39 @@ class Monster extends Sprite {
             yoyo: true,
             duration: 0.08,
           });
+        // Check if enemy is attacking the player
+        if (this.isEnemy) {
+          // Animate the number change
+          this.animateNumberChange(document.querySelector("#" + healthStat), newHealth);
+        }
         },
       })
       .to(this.position, {
         x: this.position.x,
       });
   }
+
+  heal() {
+    const healedAmount = this.fullHealth - this.health; // Amount to increase the health
+    const healthStat = "myHealthStat"; // Replace with your health stats element id
+    const initialHealth = this.health;
+    this.health = this.fullHealth;
+  
+    document.querySelector("#battleDialogue").style.display = "block";
+    document.querySelector("#battleDialogue").innerHTML =
+      this.name + " has been healed!";
+    let healthBar = "#myCurrentHealth";
+  
+    const healthPercentage = (this.health / this.fullHealth) * 100;
+
+    gsap.to(healthBar, {
+      width: healthPercentage + "%",
+    });
+  
+    // Animate the number change for healed amount
+    this.animateNumberChange(document.querySelector("#" + healthStat), initialHealth + healedAmount);
+  }
+  
 
   faint() {
     document.querySelector("#battleDialogue").innerHTML =
@@ -198,3 +258,100 @@ class Monster extends Sprite {
     });
   }
 }
+
+/*
+
+class Monster extends Sprite {
+  constructor({
+    position,
+    image,
+    srcX,
+    srcY,
+    srcWidth,
+    srcHeight,
+    width,
+    height,
+    isEnemy = false,
+    name,
+    attacks,
+    //baseHealth,
+    //baseAttack,
+    //baseDefense,
+    //baseSpeed,
+    //level = 5, // Default level set to 5
+    //currentExperience = 0, // Default current experience set to 0
+  }) {
+    super({
+      position,
+      image,
+      srcX,
+      srcY,
+      srcWidth,
+      srcHeight,
+      width,
+      height,
+    });
+    this.isEnemy = isEnemy,
+    this.name = name,
+
+    // Set base stats
+    //this.baseHealth = baseHealth;
+    //this.baseAttack = baseAttack;
+    //this.baseDefense = baseDefense;
+    //this.baseSpeed = baseSpeed;
+
+    // Set stats based on level and base stats
+    //this.level = level;
+    //this.health = Math.floor(((2 * this.baseHealth) * this.level) / 100 + this.level + 10);
+    //this.attack = Math.floor(((2 * this.baseAttack) * this.level) / 100 + 5);
+    //this.defense = Math.floor(((2 * this.baseDefense) * this.level) / 100 + 5);
+    //this.speed = Math.floor(((2 * this.baseSpeed) * this.level) / 100 + 5);
+
+    // Set experience
+    //this.currentExperience = currentExperience;
+    //this.experienceToNextLevel = this.calculateExperienceForNextLevel();
+
+    this.health = 100,
+    this.attacks = attacks;
+    if (this.isEnemy) {
+      // Set the position for enemies
+      this.position = {
+        x: 665,
+        y: 140,
+      };
+    } else {
+      this.position = {
+        x: 235,
+        y: 315,
+      };
+    }
+  }
+
+  // Function to calculate experience required for the next level
+  calculateExperienceForNextLevel() {
+    return Math.floor(this.level ** 3); // Example formula; adjust based on your game mechanics
+  }
+
+  // Function to gain experience
+  gainExperience(amount) {
+    this.currentExperience += amount;
+
+    // Check if enough experience is gained to level up
+    if (this.currentExperience >= this.experienceToNextLevel) {
+      this.levelUp();
+    }
+  }
+
+  // Function to handle level up
+  levelUp() {
+    this.level++;
+    // Recalculate stats and experience for the new level
+    this.health = Math.floor(((2 * this.baseHealth) * this.level) / 100 + this.level + 10);
+    this.attack = Math.floor(((2 * this.baseAttack) * this.level) / 100 + 5);
+    this.defense = Math.floor(((2 * this.baseDefense) * this.level) / 100 + 5);
+    this.speed = Math.floor(((2 * this.baseSpeed) * this.level) / 100 + 5);
+
+    this.currentExperience -= this.experienceToNextLevel;
+    this.experienceToNextLevel = this.calculateExperienceForNextLevel();
+  }
+*/

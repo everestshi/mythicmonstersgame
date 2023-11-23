@@ -11,10 +11,14 @@ const battleBackground = new Sprite({
   image: battleBackgroundImage,
 });
 
-let lumini;
+let myMonster;
 let renderedSprites;
 let battleAnimationId;
 let queue;
+
+const monsterToPut = new Monster(monsters.Lumini);
+player.addToParty(monsterToPut);
+myMonster = player.party[0];
 
 function getRandomMonster() {
   const monsterKeys = Object.keys(monsters);
@@ -23,18 +27,11 @@ function getRandomMonster() {
   return new Monster(monsters[randomMonsterKey]);
 }
 
-function clearEventListeners() {
-  const buttons = document.querySelectorAll("button");
-  buttons.forEach((button) => {
-    const clonedButton = button.cloneNode(true);
-    button.parentNode.replaceChild(clonedButton, button);
-  });
-}
-
 function initBattle() {
-  const randomMonster = getRandomMonster();
-  const lumini = new Monster(monsters.Lumini); // Assuming Lumini needs to be part of the battle too
-  renderedSprites = [randomMonster, lumini];
+  //const randomMonster = getRandomMonster();
+
+  const randomMonster = new Monster (monsters.Bonfur);
+  renderedSprites = [randomMonster, myMonster];
   queue = [];
 
   document.querySelector("#userInterface").style.display = "block";
@@ -42,30 +39,173 @@ function initBattle() {
   document.querySelector("#enemyCurrentHealth").style.width = "100%";
   document.querySelector("#myCurrentHealth").style.width = "100%";
   document.querySelector("#enemyName").innerHTML = randomMonster.name;
+  document.querySelector("#enemyLvl").innerHTML = "Lv." + randomMonster.level;
+  document.querySelector("#myName").innerHTML = myMonster.name;
+  document.querySelector("#myLvl").innerHTML = "Lv." + myMonster.level;
+  document.querySelector("#myHealthStat").innerHTML = myMonster.health;
+  document.querySelector("#MyTotalHealthStat").innerHTML = "/" + myMonster.health;
   document.querySelector("#attacks").replaceChildren();
-
-  const battleButton = document.querySelector("#attackOption");
-  battleButton.addEventListener("click", () => {
-    //hide battleMenu, show battle moves
-    document.querySelector("#battleMenu").style.display = "none";
-
-    //populate attacks for my monster
-    lumini.attacks.forEach((attack) => {
+  
+  function clearEventListeners() {
+    queue = [];
+    document.querySelector("#battleDialogue").style.display = "none";
+    const buttonsContainer = document.querySelector("#attacks");
+    buttonsContainer.innerHTML = ''; // Clear the current buttons
+  
+    // Call a function to populate attacks for my monster
+    myMonster.attacks.forEach((attack) => {
       const button = document.createElement("button");
       button.innerHTML = attack.name;
       document.querySelector("#attacks").append(button);
     });
+  }
 
-    attachAttackListeners();
+  //display main battle menu
+  function displayBattleMenu() {
+    clearEventListeners();
+    document.querySelector("#battleMenu").style.display = "flex";
+  }
+
+  //end the battle transition to map
+  function endBattleTransition() {
+    gsap.to("#battleTransition", {
+      opacity: 1,
+      onComplete: () => {
+        cancelAnimationFrame(battleAnimationId);
+        animate();
+        document.querySelector("#userInterface").style.display =
+          "none";
+        gsap.to("#battleTransition", {
+          opacity: 0,
+        });
+        battle.initiated = false;
+      },
+    });
+  }
+
+  //show battle menu buttons
+  function showBattleMenu() {
+    displayBattleMenu();
+
+    const battleButton = document.querySelector("#attackOption");
+    battleButton.addEventListener("click", () => {
+      //hide battleMenu, show battle moves
+      document.querySelector("#battleMenu").style.display = "none";
+      clearEventListeners(); // Clear event listeners before attaching new ones
+      attachAttackListeners();
+    });
+
+    const healButton = document.querySelector("#healOption");
+    healButton.addEventListener("click", () => {
+      document.querySelector("#battleMenu").style.display = "none";
+      myMonster.heal();
+
+      queue = []; // Clear the queue after healing
+
+        //enemy attack
+        const randomAttack =
+          randomMonster.attacks[
+            Math.floor(Math.random() * randomMonster.attacks.length)
+          ];
+
+        queue.push(() => {
+          randomMonster.attack({
+            attack: randomAttack,
+            recipient: myMonster,
+          });
+
+          if (myMonster.health <= 0) {
+            queue.push(() => {
+              myMonster.faint();
+            });
+            queue.push(() => {
+              endBattleTransition();
+            });
+          }
+          queue.push(() => {
+            clearEventListeners();
+            displayBattleMenu();
+          });
+        });
+    }); 
+  }
+
+  const runButton = document.querySelector("#runOption");
+  clearEventListeners();
+  runButton.addEventListener("click", () => {
+    document.querySelector("#battleMenu").style.display = "none";
+
+    if (myMonster.speed > randomMonster.speed){
+      document.querySelector("#battleDialogue").style.display = "block";
+      document.querySelector("#battleDialogue").innerHTML = "Ran away safely!";
+
+      queue.push(() => {
+        endBattleTransition();
+      });
+
+    } else {
+      const chance = Math.random();
+      if (chance < 0.5) {
+        document.querySelector("#battleDialogue").style.display = "block";
+        document.querySelector("#battleDialogue").innerHTML = "Ran away safely!";
+  
+        queue.push(() => {
+          endBattleTransition();
+        });
+      } else {
+        document.querySelector("#battleDialogue").style.display = "block";
+        document.querySelector("#battleDialogue").innerHTML = "Unable to run away!";
+        queue = []; // Clear the queue after healing
+  
+        //enemy attack
+        const randomAttack =
+          randomMonster.attacks[
+            Math.floor(Math.random() * randomMonster.attacks.length)
+          ];
+  
+        queue.push(() => {
+          randomMonster.attack({
+            attack: randomAttack,
+            recipient: myMonster,
+          });
+  
+          if (myMonster.health <= 0) {
+            queue.push(() => {
+              myMonster.faint();
+            });
+            queue.push(() => {
+              endBattleTransition();
+            });
+          }
+          queue.push(() => {
+            clearEventListeners();
+            displayBattleMenu();
+          });
+        });
+      }
+    }
+
   });
+
 
   function attachAttackListeners() {
     const attackButtons = document.querySelectorAll("button");
     attackButtons.forEach((button) => {
+      
+      button.addEventListener("mouseenter", (e) => {
+        const selectedAttack = attacks[e.currentTarget.innerHTML];
+
+        if (e.currentTarget.parentElement.id !== "attacks") {
+          return; // Exit the event listener without executing the code below
+        }
+        document.querySelector("#attackType").innerHTML =
+          "Attack Type: " + selectedAttack.type;
+      });
+
       button.addEventListener("click", (e) => {
         const selectedAttack = attacks[e.currentTarget.innerHTML];
         //my attack
-        lumini.attack({
+        myMonster.attack({
           attack: selectedAttack,
           recipient: randomMonster,
         });
@@ -76,18 +216,7 @@ function initBattle() {
             randomMonster.faint();
           });
           queue.push(() => {
-            gsap.to("#battleTransition", {
-              opacity: 1,
-              onComplete: () => {
-                cancelAnimationFrame(battleAnimationId);
-                animate();
-                document.querySelector("#userInterface").style.display = "none";
-                gsap.to("#battleTransition", {
-                  opacity: 0,
-                });
-                battle.initiated = false;
-              },
-            });
+            endBattleTransition();
           });
         }
 
@@ -100,39 +229,26 @@ function initBattle() {
         queue.push(() => {
           randomMonster.attack({
             attack: randomAttack,
-            recipient: lumini,
+            recipient: myMonster,
           });
 
-          if (lumini.health <= 0) {
+          if (myMonster.health <= 0) {
             queue.push(() => {
-              lumini.faint();
+              myMonster.faint();
             });
             queue.push(() => {
-              gsap.to("#battleTransition", {
-                opacity: 1,
-                onComplete: () => {
-                  cancelAnimationFrame(battleAnimationId);
-                  animate();
-                  document.querySelector("#userInterface").style.display =
-                    "none";
-                  gsap.to("#battleTransition", {
-                    opacity: 0,
-                  });
-                  battle.initiated = false;
-                },
-              });
+              endBattleTransition();
             });
           }
+          queue.push(() => {
+            showBattleMenu();
+          });
         });
-      });
-
-      button.addEventListener("mouseenter", (e) => {
-        const selectedAttack = attacks[e.currentTarget.innerHTML];
-        document.querySelector("#attackType").innerHTML =
-          "Attack Type: " + selectedAttack.type;
       });
     });
   }
+
+  showBattleMenu();
 }
 
 function animateBattle() {
@@ -143,9 +259,6 @@ function animateBattle() {
   });
 }
 
-//initBattle();
-//animateBattle();
-
 document.querySelector("#battleDialogue").addEventListener("click", (e) => {
   if (queue.length > 0) {
     queue[0]();
@@ -154,3 +267,6 @@ document.querySelector("#battleDialogue").addEventListener("click", (e) => {
     e.currentTarget.style.display = "none";
   }
 });
+
+initBattle();
+animateBattle();

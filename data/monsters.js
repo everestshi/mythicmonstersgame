@@ -10,13 +10,20 @@ const bonfurImage = new Image();
 bonfurImage.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Bonfur.png';
 
 
+function getRandomLevel() {
+    return Math.floor(Math.random() * (7 - 3 + 1)) + 3;
+  }
+
 const monsters = {
     Lumini : {
         image: luminiImage,
         width: luminiImage.width * 1.5,
         height: luminiImage.height * 1.5,
         name: 'Lumini',
-        attacks: [attacks.Tackle, attacks.Lightball]
+        level: getRandomLevel(),
+        attacks: [attacks.Tackle, attacks.Lightball],
+        baseHealth: 80,
+        baseSpeed: 10,
     },
 
     Skelleks: {
@@ -25,7 +32,9 @@ const monsters = {
         height: skelleksImage.height * 1.5,
         isEnemy: true,
         name: 'Skelleks',
-        attacks: [attacks.Tackle, attacks.Headbutt]
+        level: getRandomLevel(),
+        attacks: [attacks.Tackle, attacks.Headbutt],
+        baseSpeed: 2,
     },
     
     Asterish: {
@@ -34,7 +43,9 @@ const monsters = {
         height: asterishImage.height * 1.5,
         isEnemy: true,
         name: 'Asterish',
-        attacks: [attacks.Tackle, attacks.Headbutt]
+        level: getRandomLevel(),
+        attacks: [attacks.Tackle, attacks.Headbutt],
+        baseSpeed: 5,
     },
 
     Pompet: {
@@ -43,7 +54,9 @@ const monsters = {
         height: pompetImage.height * 1.5,
         isEnemy: true,
         name: 'Pompet',
-        attacks: [attacks.Tackle, attacks.Headbutt]
+        level: getRandomLevel(),
+        attacks: [attacks.Tackle, attacks.Headbutt],
+        baseSpeed: 9,
     },
 
     Bonfur: {
@@ -52,6 +65,9 @@ const monsters = {
         height: bonfurImage.height * 1.5,
         isEnemy: true,
         name: 'Bonfur',
-        attacks: [attacks.Tackle, attacks.Headbutt]
+        level: getRandomLevel(),
+        attacks: [attacks.Tackle, attacks.Headbutt],
+        baseHealth: 40,
+        baseSpeed: 7,
     },
 }

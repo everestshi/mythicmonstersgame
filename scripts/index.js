@@ -166,6 +166,7 @@ const battle = {
 
 //animation loop
 function animate() {
+    const animationId = window.requestAnimationFrame(animate);
     //draw sprites
     background.draw();
     boundaries.forEach(boundary => {
@@ -335,8 +336,6 @@ function animate() {
         frameIndex = 0;
         updatePlayerSprite();
     }
-    const animationId = window.requestAnimationFrame(animate);
-
 };
 
 // Wait for images to load NEED TO ADD FOREGROUND AND BOUNDARY
@@ -345,7 +344,7 @@ image.onload = function () {
     playerImage.onload = function () {
         console.log("player loaded")
         // Both images have loaded, start the animation loop
-        animate();
+        //animate();
     };
 };
 

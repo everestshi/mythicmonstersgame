@@ -17,25 +17,34 @@
         
         <div id="userInterface">
             <div id="enemyBattleInfo">
-                <h1 id="enemyName"></h1>
+                <div id="enemyTitleInfo">
+                    <h1 id="enemyName"></h1>
+                    <h1 id="enemyLvl"></h1>
+                </div>
                 <div id="healthBar">
                     <div id="enemyBaseHealth"></div>
                     <div id="enemyCurrentHealth"></div>
                 </div>
             </div>
             <div id="myBattleInfo">
-                <h1>Lumini</h1>
+                <div id="myTitleInfo">
+                    <h1 id="myName"></h1>
+                    <h1 id="myLvl"></h1>
+                </div>
                 <div id="healthBar">
                     <div id="myBaseHealth"></div>
                     <div id="myCurrentHealth"></div>
+                    <div id = "myHealthNumbers">
+                        <h1 id="myHealthStat"></h1><h1 id="MyTotalHealthStat"></h1>
+                    </div>
                 </div>
             </div>
             <div id="battleMenu">
                 <div id="battleQuestion">What will you do?</div>
                 <div id="battleMenuButtons">
                     <button id="attackOption">Attack</button>
-                    <button id="switchOption">Switch</button>
-                    <button id="catchOption">Catch</button>
+                    <button id="healOption">Heal</button>
+                    <button id="statsOption">Stats</button>
                     <button id="runOption">Run</button>
                 </div>
             </div>
