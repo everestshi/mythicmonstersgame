@@ -79,7 +79,7 @@ class Player extends Sprite {
       width,
       height,
     });
-    this.party = []; // An empty array to store the player's monsters
+    this.party = [];
   }
 
   addToParty(monster) {
@@ -95,6 +95,32 @@ class Player extends Sprite {
   }
 }
 
+class NPC extends Sprite {
+  constructor({
+    position,
+    image,
+    srcX,
+    srcY,
+    srcWidth,
+    srcHeight,
+    width,
+    height,
+    dialogue = "Hello!",
+  }) {
+    super({
+      position,
+      image,
+      srcX,
+      srcY,
+      srcWidth,
+      srcHeight,
+      width,
+      height,
+    });
+    this.dialogue = dialogue;
+  }
+}
+
 class Monster extends Sprite {
   constructor({
     position,
@@ -107,13 +133,14 @@ class Monster extends Sprite {
     height,
     isEnemy = false,
     name,
+    type,
     level,
     attacks,
     baseHealth,
     baseAttack,
     baseDefense,
     baseSpeed,
-    //experience,
+    currentExperience = 0,
   }) {
     super({
       position,
@@ -125,16 +152,19 @@ class Monster extends Sprite {
       width,
       height,
     });
+    this.type = type;
     this.level = level;
     this.baseHealth = baseHealth;
     this.fullHealth = Math.floor(((2 * this.baseHealth) * this.level) / 100 + this.level + 10);
     this.baseAttack = baseAttack;
     this.baseDefense = baseDefense;
     this.baseSpeed = baseSpeed;
+    this.currentExperience = currentExperience;
+    this.experienceToNextLevel = Math.floor(this.level ** 3);
 
     this.health = this.fullHealth;
-    //this.attack = Math.floor(((2 * this.baseAttack) * this.level) / 100 + 5);
-    //this.defense = Math.floor(((2 * this.baseDefense) * this.level) / 100 + 5);
+    this.attack = Math.floor(((2 * this.baseAttack) * this.level) / 100 + 5);
+    this.defense = Math.floor(((2 * this.baseDefense) * this.level) / 100 + 5);
     this.speed = Math.floor((2 * this.baseSpeed * this.level) / 100 + 5);
 
     //this.experience = experience;
@@ -149,6 +179,7 @@ class Monster extends Sprite {
         y: 140,
       };
     } else {
+      // Set position of my monster
       this.position = {
         x: 235,
         y: 315,
@@ -156,14 +187,35 @@ class Monster extends Sprite {
     }
   }
 
+  // Function to gain experience
+  gainExperience(amount) {
+    this.currentExperience += amount;
+
+    // Check if enough experience is gained to level up
+    if (this.currentExperience >= this.experienceToNextLevel) {
+      this.levelUp();
+    }
+  }
+
+  // Function to handle level up
+  levelUp() {
+    this.level++;
+    // Recalculate stats and experience for the new level
+    this.fullHealth = Math.floor(((2 * this.baseHealth) * this.level) / 100 + this.level + 10);
+    this.attack = Math.floor(((2 * this.baseAttack) * this.level) / 100 + 5);
+    this.defense = Math.floor(((2 * this.baseDefense) * this.level) / 100 + 5);
+    this.speed = Math.floor(((2 * this.baseSpeed) * this.level) / 100 + 5);
+
+    this.currentExperience -= this.experienceToNextLevel;
+    this.experienceToNextLevel = Math.floor(this.level ** 3);
+  }
+
+  // Function for animating health number change
   animateNumberChange(element, newValue) {
     const currentValue = parseInt(element.textContent);
     const difference = Math.abs(newValue - currentValue);
     const direction = currentValue < newValue ? 1 : -1;
     const duration = 500; // Adjust this value for speed
-    console.log('New Value:', newValue);
-  console.log('Current Value:', currentValue);
-  console.log('Difference:', difference);
 
     let i = currentValue;
     const interval = setInterval(() => {
@@ -176,7 +228,8 @@ class Monster extends Sprite {
     }, duration / difference);
   }
 
-  attack({ attack, recipient }) {
+  // Attack method 
+  attackMethod({ attack, recipient }) {
     document.querySelector("#battleDialogue").style.display = "block";
     document.querySelector("#battleDialogue").innerHTML =
       this.name + " used " + attack.name;
@@ -185,22 +238,40 @@ class Monster extends Sprite {
     const healthStat = "myHealthStat";
     const initialHealth = recipient.health;
 
-    // Calculate attack and defense here
-    const attackerAttackStat = Math.floor(((2 * this.baseAttack) * this.level) / 100 + 5);
-    const defenderDefenseStat = Math.floor(((2 * recipient.baseDefense) * recipient.level) / 100 + 5);
-    const movePower = attack.damage;
-    //console.log('Attacker Attack Stat:', attackerAttackStat);
-    //console.log('Defender Defense Stat:', defenderDefenseStat);
-    //console.log('Move Power:', movePower);
+    // Get types of attacker and recipient
+    const attackerType = attack.type;
+    const recipientType = recipient.type;
 
-    const damage = Math.floor((((2 * this.level / 5 + 2) * attackerAttackStat * movePower / defenderDefenseStat) / 50) + 2);
-    console.log(damage);
+    // Fetch type matchups for the attacker's type
+    const attackerMatchups = typeMatchups[attackerType];
+    let modifier = 1;
+    let dialogue = "";
+    
+    // Check for effectiveness
+    if (attackerMatchups) {
+      if (attackerMatchups.superEffective.includes(recipientType)) {
+        modifier = 2;
+        dialogue = ", it was super effective!";
+      } else if (attackerMatchups.weakAgainst.includes(recipientType)) {
+        modifier = 0.5;
+        dialogue = ", it was not very effective...";
+      }
+    } else {
+      dialogue = ".";
+    }
+    document.querySelector("#battleDialogue").innerHTML =
+      this.name + " used " + attack.name + dialogue;
+
+    // Damage calculations
+    const movePower = attack.damage;
+    let damage = Math.floor(((((2 * this.level / 5 + 2) * this.attack * movePower / recipient.defense) / 50) + 2) * modifier);
 
     recipient.health -= damage;
     const newHealth = Math.max(initialHealth - damage, 0)
 
-    const tl = gsap.timeline();
 
+    // Movement animation
+    const tl = gsap.timeline();
     let movementDistance = this.isEnemy ? -20 : 20;
 
     tl.to(this.position, {
@@ -273,100 +344,3 @@ class Monster extends Sprite {
     });
   }
 }
-
-/*
-
-class Monster extends Sprite {
-  constructor({
-    position,
-    image,
-    srcX,
-    srcY,
-    srcWidth,
-    srcHeight,
-    width,
-    height,
-    isEnemy = false,
-    name,
-    attacks,
-    //baseHealth,
-    //baseAttack,
-    //baseDefense,
-    //baseSpeed,
-    //level = 5, // Default level set to 5
-    //currentExperience = 0, // Default current experience set to 0
-  }) {
-    super({
-      position,
-      image,
-      srcX,
-      srcY,
-      srcWidth,
-      srcHeight,
-      width,
-      height,
-    });
-    this.isEnemy = isEnemy,
-    this.name = name,
-
-    // Set base stats
-    //this.baseHealth = baseHealth;
-    //this.baseAttack = baseAttack;
-    //this.baseDefense = baseDefense;
-    //this.baseSpeed = baseSpeed;
-
-    // Set stats based on level and base stats
-    //this.level = level;
-    //this.health = Math.floor(((2 * this.baseHealth) * this.level) / 100 + this.level + 10);
-    //this.attack = Math.floor(((2 * this.baseAttack) * this.level) / 100 + 5);
-    //this.defense = Math.floor(((2 * this.baseDefense) * this.level) / 100 + 5);
-    //this.speed = Math.floor(((2 * this.baseSpeed) * this.level) / 100 + 5);
-
-    // Set experience
-    //this.currentExperience = currentExperience;
-    //this.experienceToNextLevel = this.calculateExperienceForNextLevel();
-
-    this.health = 100,
-    this.attacks = attacks;
-    if (this.isEnemy) {
-      // Set the position for enemies
-      this.position = {
-        x: 665,
-        y: 140,
-      };
-    } else {
-      this.position = {
-        x: 235,
-        y: 315,
-      };
-    }
-  }
-
-  // Function to calculate experience required for the next level
-  calculateExperienceForNextLevel() {
-    return Math.floor(this.level ** 3); // Example formula; adjust based on your game mechanics
-  }
-
-  // Function to gain experience
-  gainExperience(amount) {
-    this.currentExperience += amount;
-
-    // Check if enough experience is gained to level up
-    if (this.currentExperience >= this.experienceToNextLevel) {
-      this.levelUp();
-    }
-  }
-
-  // Function to handle level up
-  levelUp() {
-    this.level++;
-    // Recalculate stats and experience for the new level
-    this.health = Math.floor(((2 * this.baseHealth) * this.level) / 100 + this.level + 10);
-    this.attack = Math.floor(((2 * this.baseAttack) * this.level) / 100 + 5);
-    this.defense = Math.floor(((2 * this.baseDefense) * this.level) / 100 + 5);
-    this.speed = Math.floor(((2 * this.baseSpeed) * this.level) / 100 + 5);
-
-    this.currentExperience -= this.experienceToNextLevel;
-    this.experienceToNextLevel = this.calculateExperienceForNextLevel();
-  }
-*/

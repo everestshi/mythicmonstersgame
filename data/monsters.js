@@ -9,6 +9,50 @@ pompetImage.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Pompet.png
 const bonfurImage = new Image();
 bonfurImage.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Bonfur.png';
 
+// Define types and their advantages and disadvantages
+const typeMatchups = {
+    Fire: {
+      superEffective: ['Grass'],
+      weakAgainst: ['Water'],
+    },
+    Water: {
+      superEffective: ['Fire'],
+      weakAgainst: ['Grass'],
+    },
+    Grass: {
+      superEffective: ['Water'],
+      weakAgainst: ['Fire'],
+    },
+    Light: {
+        superEffective: ['Fire', 'Water', 'Grass', 'Dark'],
+        weakAgainst: ['Light', 'Dark'],
+    },
+    Dark: {
+        superEffective: ['Fire', 'Water', 'Grass', 'Light', 'Dark'],
+        weakAgainst: ['Fire', 'Water', 'Grass', 'Light', 'Dark'],
+    }
+  };
+  
+  // Check if an attack is super effective or weak against a target
+  function checkTypeMatchup(attackType, targetTypes) {
+    let result = '';
+  
+    for (const type of targetTypes) {
+      if (typeMatchups[type]) {
+        if (typeMatchups[type].superEffective && typeMatchups[type].superEffective.includes(attackType)) {
+          result = 'supereffective';
+          break;
+        } else if (typeMatchups[type].weakAgainst && typeMatchups[type].weakAgainst.includes(attackType)) {
+          result = 'notveryeffective';
+          break;
+        }
+      }
+    }
+    if (!result) {
+      result = 'neutral';
+    }
+    return result;
+  }
 
 function getRandomLevel() {
     return Math.floor(Math.random() * (7 - 3 + 1)) + 3;
@@ -20,8 +64,9 @@ const monsters = {
         width: luminiImage.width * 1.5,
         height: luminiImage.height * 1.5,
         name: 'Lumini',
-        level: 10,
-        attacks: [attacks.Tackle, attacks.Lightball],
+        type: 'Light',
+        level: 5,
+        attacks: [attacks.Tackle, attacks.Lightball, attacks.Headbutt, attacks.MegaLightball],
         baseHealth: 80,
         baseAttack: 50,
         baseDefense: 50,
@@ -34,6 +79,7 @@ const monsters = {
         height: skelleksImage.height * 1.5,
         isEnemy: true,
         name: 'Skelleks',
+        type: 'Dark',
         level: getRandomLevel(),
         attacks: [attacks.Tackle, attacks.Headbutt],
         baseSpeed: 2,
@@ -45,6 +91,7 @@ const monsters = {
         height: asterishImage.height * 1.5,
         isEnemy: true,
         name: 'Asterish',
+        type: 'Water',
         level: getRandomLevel(),
         attacks: [attacks.Tackle, attacks.Headbutt],
         baseSpeed: 5,
@@ -56,6 +103,7 @@ const monsters = {
         height: pompetImage.height * 1.5,
         isEnemy: true,
         name: 'Pompet',
+        type: 'Grass',
         level: getRandomLevel(),
         attacks: [attacks.Tackle, attacks.Headbutt],
         baseSpeed: 9,
@@ -67,7 +115,8 @@ const monsters = {
         height: bonfurImage.height * 1.5,
         isEnemy: true,
         name: 'Bonfur',
-        level: 70,
+        type: 'Fire',
+        level: 10,
         attacks: [attacks.Tackle, attacks.Headbutt, attacks.Lightball],
         baseHealth: 40,
         baseAttack: 70,

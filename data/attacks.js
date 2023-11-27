@@ -11,7 +11,27 @@ const attacks = {
     },
     Lightball: {
         name: 'Lightball',
-        damage: 80,
+        damage: 40,
         type: 'Light'
-    }
+    },
+    MegaLightball: {
+        name: 'MegaLightball',
+        damage: 300,
+        type: 'Light'
+    },
+    PyroBall: {
+        name: 'PyroBall',
+        damage: 40,
+        type: 'Fire'
+    },
+    HydroBlast: {
+        name: 'HydroBlast',
+        damage: 40,
+        type: 'Water'
+    },
+    Leafage: {
+        name: 'Leafage',
+        damage: 40,
+        type: 'Grass'
+    },
 }
