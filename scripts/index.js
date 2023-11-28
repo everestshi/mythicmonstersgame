@@ -236,6 +236,10 @@ const movables = [
   ...battleZones,
   professor,
   leader,
+  bridgeman,
+  trainer1,
+  trainer2,
+  trainer3,
 ];
 
 //battle object
@@ -256,6 +260,12 @@ function animate() {
   });
   professor.draw();
   leader.draw();
+  bridgeman.draw();
+  if (game.acceptedChallenge) {
+    trainer1.draw();
+    trainer2.draw();
+    trainer3.draw();
+  }
 
   player.draw();
   foreground.draw();
@@ -545,7 +555,6 @@ function animate() {
 // Wait for images to load NEED TO ADD FOREGROUND AND BOUNDARY
 image.onload = function () {
   console.log("image loaded");
-
     animate();
   };
 
@@ -595,36 +604,3 @@ $(document)
     }
     console.log(keys);
   });
-
-/*
-  const npcDialogues = {
-    professor: [
-      {
-        line: "Hello, young trainer! What brings you here?",
-        options: [
-          {
-            text: "I'm here for a Pokemon adventure!",
-            nextDialogue: 1 // Index of the next dialogue in the array
-          },
-          {
-            text: "I wanted to ask about your research.",
-            nextDialogue: 2
-          }
-        ]
-      },
-      {
-        line: "That's fantastic! Have you caught any Pokemon yet?",
-        options: [
-          // Options for the second dialogue...
-        ]
-      },
-      {
-        line: "My research is about...",
-        options: [
-          // Options for the third dialogue...
-        ]
-      }
-    ],
-    // Other NPCs and their dialogues...
-  };
-*/

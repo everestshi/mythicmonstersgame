@@ -1,4 +1,32 @@
 "use strict";
+//Game class Creation
+class Game {
+  constructor() {
+      this.obtainedMonster = false;
+      this.acceptedChallenge = false;
+      this.beatenChallenge = false;
+      this.beatenLeader = false;
+  }
+
+  setMonsterObtained(value) {
+      this.obtainedMonster = value;
+  }
+
+  setAcceptedChallenge(value) {
+      this.acceptedChallenge = value;
+  }
+
+  setBeatenChallenge(value) {
+      this.beatenChallenge = value;
+  }
+
+  setBeatenLeader(value) {
+      this.beatenLeader = value;
+  }
+
+  // Other game logic and state management methods could go here
+}
+
 
 //Boundary Class Creation
 class Boundary {
@@ -105,7 +133,7 @@ class NPC extends Sprite {
     srcHeight,
     width,
     height,
-    dialogue = "Hello!",
+    dialogue,
   }) {
     super({
       position,
@@ -118,6 +146,7 @@ class NPC extends Sprite {
       height,
     });
     this.dialogue = dialogue;
+    this.party = [];
   }
 }
 
@@ -131,7 +160,7 @@ class Monster extends Sprite {
     srcHeight,
     width,
     height,
-    isEnemy = false,
+    isEnemy = true,
     name,
     type,
     level,
@@ -143,8 +172,8 @@ class Monster extends Sprite {
     currentExperience = 0,
   }) {
     super({
-      position,
-      image,
+      position: isEnemy ? { x: 665, y: 140 } : position,
+      image: isEnemy ? image.front : image.back,
       srcX,
       srcY,
       srcWidth,
@@ -167,24 +196,14 @@ class Monster extends Sprite {
     this.defense = Math.floor(((2 * this.baseDefense) * this.level) / 100 + 5);
     this.speed = Math.floor((2 * this.baseSpeed * this.level) / 100 + 5);
 
-    //this.experience = experience;
     this.isEnemy = isEnemy;
     this.name = name;
     this.attacks = attacks;
-
-    if (this.isEnemy) {
-      // Set the position for enemies
-      this.position = {
-        x: 665,
-        y: 140,
-      };
-    } else {
-      // Set position of my monster
-      this.position = {
-        x: 235,
-        y: 315,
-      };
-    }
+      
+    if (!isEnemy) {
+      this.position = { x: 235, y: 315 };
+    };
+    
   }
 
   // Function to gain experience

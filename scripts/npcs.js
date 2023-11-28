@@ -1,3 +1,6 @@
+//New game
+const game = new Game();
+
 // Load NPC images
 const npcProfessorImage = new Image();
 npcProfessorImage.src = "/images/NPCs/MM-Professor-Front.png";
@@ -5,6 +8,11 @@ npcProfessorImage.src = "/images/NPCs/MM-Professor-Front.png";
 const npcLeaderImage = new Image();
 npcLeaderImage.src = "/images/NPCs/MM-leader.png";
 
+const npcBridgemanImage = new Image();
+npcBridgemanImage.src = "/images/NPCs/MM-bridgeman.png";
+
+const npcTrainerImage = new Image();
+npcTrainerImage.src = "/images/NPCs/MM-trainee.png";
 
 // Load Player Image
 const playerImage = new Image();
@@ -55,7 +63,67 @@ const leader = new NPC({
   height: npcProfessorImage.height,
 });
 
-const npcs = [professor, leader];
+//Bridgeman sprite
+const bridgeman = new NPC({
+    position: {
+        x: canvas.width / 2 + 300,
+        y: canvas.height / 2 - 200,
+    },
+    image: npcBridgemanImage,
+    srcX: (npcBridgemanImage.width / 4) * 2, // The third sprite (zero-indexed)
+    srcY: 0,
+    srcWidth: npcBridgemanImage.width / 4,
+    srcHeight: npcBridgemanImage.height,
+    width: npcBridgemanImage.width / 4,
+    height: npcBridgemanImage.height,
+});
+
+//Trainer1 sprite
+const trainer1 = new NPC({
+    position: {
+        x: canvas.width / 2 - 300,
+        y: canvas.height / 2 + 200,
+    },
+    image: npcTrainerImage,
+    srcX: (npcTrainerImage.width / 4) * 3, 
+    srcY: 0,
+    srcWidth: npcTrainerImage.width / 4,
+    srcHeight: npcTrainerImage.height,
+    width: npcTrainerImage.width / 4,
+    height: npcTrainerImage.height,
+});
+
+//Trainer2 sprite
+const trainer2 = new NPC({
+    position: {
+        x: canvas.width / 2 - 400,
+        y: canvas.height / 2 + 200,
+    },
+    image: npcTrainerImage,
+    srcX: (npcTrainerImage.width / 4) * 2, 
+    srcY: 0,
+    srcWidth: npcTrainerImage.width / 4,
+    srcHeight: npcTrainerImage.height,
+    width: npcTrainerImage.width / 4,
+    height: npcTrainerImage.height,
+});
+
+//Trainer3 sprite
+const trainer3 = new NPC({
+    position: {
+        x: canvas.width / 2 - 500,
+        y: canvas.height / 2 + 200,
+    },
+    image: npcTrainerImage,
+    srcX: (npcTrainerImage.width / 4), 
+    srcY: 0,
+    srcWidth: npcTrainerImage.width / 4,
+    srcHeight: npcTrainerImage.height,
+    width: npcTrainerImage.width / 4,
+    height: npcTrainerImage.height,
+});
+
+const npcs = [professor, leader, bridgeman, trainer1, trainer2, trainer3];
 
 // Define a variable to track NPC interaction
 let interactingWithNPC = false;
@@ -77,16 +145,16 @@ function hideNPCDialogue() {
             line: "...I see you grow weary of island life. Is coding all day on a tropical island truly not enough for you?",
         },
         {
-            line: "If that's the case, then why not because a Mythical Monster tamer? I, myself, am a Monster Researcher, and could use an assistant!",
+            line: "If that's the case, then why not become a Mythical Monster tamer? I, myself, am a Monster Researcher, and could use an assistant!",
         },
         {
-            line: "However, you will need to prove yourself first. The world of Mythical Monsters is deep, and there is much to explore.",
+            line: "However, you will need to prove yourself first. The world of Mythical Monsters is deep, and dangerous, but there is much to explore.",
         },
         {
             line: "I have tamed some beginner monsters that should be alright for you to handle. You may pick only one, that will already quite a difficult task to raise these fascinating creatures!",
         },
         {
-            line: "I have the Grass-type Pompet, the Water-type Asterish, or the Fire-type Bonfur.",
+            line: "I have the Grass-type Pompet, the Water-type Dampurr, or the Fire-type Bonfur.",
         },
         {
             line: "If you feel unsure, I also have the Light-type Lumini - it's very strong against most types, and weak to very few!",
@@ -103,82 +171,222 @@ function hideNPCDialogue() {
                     text: "Pompet",
                     nextDialogue: [
                         { line: "" },
-                        { line: "So you've chosen the Grass-type Pompet!" }
+                        { line: "So you've chosen the Grass-type Pompet!" },
+                        {
+                            line: "If you travel back to your town, there is a bridge to the East that you may cross over. You'll find yourself in an area teeming with wild Mythical Monsters where you can train with your partner!",
+                        },
+                        {
+                            line: "However, be warned - if your Monster loses all it's HitPoints, there will be nothing to protect you from the wild monsters in the area. You can heal your partner once per battle as an emergency, so be wise about your battles.",
+                        },
+                        {
+                            line: "On the other side of that area, the island leader will be waiting. Your first mission will be to seek him out and complete his tasks, he will train you and your partner to become stronger.",
+                        },
+                        {
+                            line: "After you beat him, come back to me, and then we can talk about what your next task will be.",
+                        },
                     ]
                 },
                 {
-                    text: "Asterish",
+                    text: "Dampurr",
                     nextDialogue: [
                         {line: ""},
-                        {line: "So you've chosen the Water-type Asterish!"}
+                        {line: "So you've chosen the Water-type Dampurr!"},
+                        {
+                            line: "If you travel back to your town, there is a bridge to the East that you may cross over. You'll find yourself in an area teeming with wild Mythical Monsters where you can train with your partner!",
+                        },
+                        {
+                            line: "However, be warned - if your Monster loses all it's HitPoints, there will be nothing to protect you from the wild monsters in the area. You can heal your partner once per battle as an emergency, so be wise about your battles.",
+                        },
+                        {
+                            line: "On the other side of that area, our island leader will be waiting. Your first mission will be to seek him out and complete his tasks, he will train you and your partner to become stronger.",
+                        },
+                        {
+                            line: "After you beat him, come back to me, and then we can talk about what your next task will be.",
+                        },
                     ]
                 },
                 {
                     text: "Bonfur",
                     nextDialogue: [
                         {line: ""},
-                        {line: "So you've chosen the Fire-type Bonfur!"}
+                        {line: "So you've chosen the Fire-type Bonfur!"},
+                        {
+                            line: "If you travel back to your town, there is a bridge to the East that you may cross over. You'll find yourself in an area teeming with wild Mythical Monsters where you can train with your partner!",
+                        },
+                        {
+                            line: "However, be warned - if your Monster loses all it's HitPoints, there will be nothing to protect you from the wild monsters in the area. You can heal your partner once per battle as an emergency, so be wise about your battles.",
+                        },
+                        {
+                            line: "On the other side of that area, our island leader will be waiting. Your first mission will be to seek him out and complete his tasks, he will train you and your partner to become stronger.",
+                        },
+                        {
+                            line: "After you beat him, come back to me, and then we can talk about what your next task will be.",
+                        },
                     ]
                 },
                 {
                     text: "Lumini",
                     nextDialogue: [
                         {line: ""},
-                        {line: "So you've chosen the Light-type Lumini!"}
+                        {line: "So you've chosen the Light-type Lumini!"},
+                        {
+                            line: "If you travel back to your town, there is a bridge to the East that you may cross over. You'll find yourself in an area teeming with wild Mythical Monsters where you can train with your partner!",
+                        },
+                        {
+                            line: "However, be warned - if your Monster loses all it's HitPoints, there will be nothing to protect you from the wild monsters in the area. You can heal your partner once per battle as an emergency, so be wise about your battles.",
+                        },
+                        {
+                            line: "On the other side of that area, our island leader will be waiting. Your first mission will be to seek him out and complete his tasks, he will train you and your partner to become stronger.",
+                        },
+                        {
+                            line: "After you beat him, come back to me, and then we can talk about what your next task will be.",
+                        },
                     ]
                 },
                 {
                     text: "Skelleks",
                     nextDialogue: [
                         {line: ""},
-                        {line: "So you've chosen the Dark-type Skelleks!"}
+                        {line: "So you've chosen the Dark-type Skelleks!"},
+                        {
+                            line: "If you travel back to your town, there is a bridge to the East that you may cross over. You'll find yourself in an area teeming with wild Mythical Monsters where you can train with your partner!",
+                        },
+                        {
+                            line: "However, be warned - if your Monster loses all it's HitPoints, there will be nothing to protect you from the wild monsters in the area. You can heal your partner once per battle as an emergency, so be wise about your battles.",
+                        },
+                        {
+                            line: "On the other side of that area, our island leader will be waiting. Your first mission will be to seek him out and complete his tasks, he will train you and your partner to become stronger.",
+                        },
+                        {
+                            line: "After you beat him, come back to me, and then we can talk about what your next task will be.",
+                        },
                     ]
                 }
             ]
-        }
+        },
     ],
     leader: [
         {
-            line: "Greetings, traveler!",
+            line: "Greetings, challenger! So, the professor has sent you here to undergo training, eh? Well it won't be easy!",
+        },
+        {
+            line: "In fact, before I take you under my wing, you will need to prove that you are worthy of my training. I will send three of my disciples across the island - find them and defeat them.",
+        },
+        {
+            line: "Will you undergo my challenge?",
+        },
+        {
             options: [
                 {
-                    text: "Ask about the region",
+                    text: "Yes",
                     nextDialogue: [
-                        "This region has a rich history and many stories to tell.",
-                        "What specifically would you like to know?"
+                        { line: "" },
+                        {
+                            line: "Fantastic! Now, before you leave, allow me to impart some battle knowledge: ",
+                        },
+                        {
+                            line: "Each monster has a certain type, and there are move types that can be very effective or not effective at all against it.",
+                        },
+                        {
+                            line: "Each monster also has a Hitpoint, Attack, Defense, and Speed stat. Understanding how these relate to each other and to your opponent would be wise.",
+                        },
+                        {
+                            line: "Finally, your monster will grow stronger every time it defeats another, so train it well! However, it only takes a single loss for all of this to end, so be careful.",
+                        },
+                        {
+                            line: "Best of luck, young one! I will be here waiting!",
+                        },
                     ]
                 },
                 {
-                    text: "Offer help",
+                    text: "No",
                     nextDialogue: [
-                        "We could use someone of your skills. A monster has been causing trouble.",
-                        "Would you be willing to deal with it?"
+                        {line: ""},
+                        {line: "That is alright. I will be here whenever you feel ready to attempt my challenge!"},
                     ]
-                }
+                },
             ]
-        }
+        },
+    ],
+    bridgeman: [
+        {
+            line: "There's dangerous monsters beyond this bridge! I can't in good faith allow you to pass if you don't have any way of defending yourself!",
+        },
     ]
 };
 
 const npcDialogueMapping = {
     professor: professor,
     leader: leader,
+    bridgeman: bridgeman,
+    trainer1: trainer1,
+    trainer2: trainer2,
+    trainer3: trainer3,
     // Add other NPCs as needed...
 };
 
+function updateProfessorDialogue() {
+    if (game.obtainedMonster) {
+        npcDialogueTexts.professor = [
+            { 
+                line: "Back so soon? You'll need to beat the island leader before I can entrust you with some assistant duties." 
+            },
+            {
+                line: "The leader is across the area past the bridge east of your home town. Come find me after you've gained his approval.",
+            },
+        ];
+    }
+}
+
+function updateBridgemanSprite() {
+    if (game.obtainedMonster) {
+        bridgeman.srcX = (npcBridgemanImage.width / 4); // Setting the sprite to the last one
+        bridgeman.position.y += 48;
+        npcDialogueTexts.bridgeman = [
+            { 
+                line: "Looks like you've got a good partner with you. Be careful, the wild Mythical Monsters beyond here are ruthless!" 
+            },
+        ];
+    }
+}
+
+function updateLeaderDialogue() {
+    if (game.acceptedChallenge) {
+        npcDialogueTexts.leader = [
+            { 
+                line: "You will need to defeat 3 of my disciples across the island before I permit you to challenge me." 
+            },                        {
+                line: "Remember, each monster has a certain type, and there are move types that can be very effective or not effective at all against it.",
+            },
+            {
+                line: "Each monster also has a Hitpoint, Attack, Defense, and Speed stat. Understanding how these relate to each other and to your opponent would be wise.",
+            },
+            {
+                line: "Finally, your monster will grow stronger every time it defeats another, so train it well! However, it only takes a single loss for all of this to end, so be careful.",
+            },
+            {
+                line: "Best of luck, young one! I will be here waiting!",
+            },
+        ];
+    }
+}
+
 let currentDialogue = null;
 let currentLineIndex = 0;
+let currentNPCKey = null;
 
+
+// Function to display the NPC's dialogue
 function displayNPCDialogue(npcInstance) {
     const dialogueElement = document.querySelector("#npcDialogue");
     dialogueElement.style.display = "flex";
 
-    const npcKey = Object.keys(npcDialogueMapping).find(
+    currentNPCKey = Object.keys(npcDialogueMapping).find(
         (key) => npcDialogueMapping[key] === npcInstance
     );
 
-    if (npcKey && npcDialogueTexts[npcKey]) {
-        currentDialogue = npcDialogueTexts[npcKey];
+    if (currentNPCKey && npcDialogueTexts[currentNPCKey]) {
+        currentDialogue = npcDialogueTexts[currentNPCKey];
         displayCurrentDialogue();
     }
 }
@@ -199,13 +407,27 @@ function displayCurrentDialogue() {
                 const optionButton = document.createElement("button");
                 optionButton.innerText = option.text;
                 optionButton.addEventListener("click", () => {
-                    const monsterName = option.text;
-                    const monsterData = monsters[monsterName]; // Retrieve the monster data by name
-                    const monsterInstance = new Monster(monsterData); // Create a Monster instance
-                    player.addToParty(monsterInstance); // Add the monster instance to the player's party
-                    let myMonster;
-                    myMonster = player.party[0];
+                    
+                    if (currentNPCKey === 'professor') {
+                        const monsterName = option.text;
+                        const monsterData = monsters[monsterName]; // Retrieve the monster data by name
+                        const monsterInstance = new Monster({ ...monsterData, isEnemy: false });
+                        player.addToParty(monsterInstance); // Add the monster instance to the player's party
+                        
+                        // Update the game state to indicate that the player has obtained a monster
+                        game.setMonsterObtained(true);
 
+                        // Update the professor's dialogue based on the game state
+                        updateProfessorDialogue();
+                        updateBridgemanSprite();
+                    } else if (currentNPCKey === 'leader' && option.text === 'Yes') {
+                        game.setAcceptedChallenge(true);
+                        trainer1.draw();
+                        trainer2.draw();
+                        trainer3.draw();
+                        updateLeaderDialogue();
+                    }
+                    
                     currentDialogue = option.nextDialogue; // Update current dialogue
                     currentLineIndex = 0; // Reset to the first line of new dialogue
                     displayCurrentDialogue(); // Display new dialogue
@@ -235,50 +457,3 @@ document.querySelector("#npcDialogue").addEventListener('click', () => {
         hideNPCDialogue();
     }
 });
-
-
-
-
-/*
-    if (npcDialogueTexts[npc] && npcDialogueTexts[npc].length > 0) {
-        currentDialogue = npcDialogueTexts[npc][0];
-        currentLineIndex = 0; // Reset the line index to 0
-        displayCurrentDialogue();
-    } else {
-        console.error(`No dialogue found for ${npc}`);
-    }
-
-    dialogueElement.addEventListener('click', () => {
-        if (currentDialogue.options && currentLineIndex < currentDialogue.options.length - 1) {
-            currentLineIndex++;
-            displayCurrentDialogue();
-        }
-    });*/
-
-/*
-function displayCurrentDialogue() {
-    const dialogueElement = document.querySelector("#npcDialogue");
-    const optionButtons = document.querySelector("#npcOptions");
-  
-    if (currentLineIndex < currentDialogue.line.length) {
-        dialogueElement.innerText = currentDialogue.line[currentLineIndex];
-    } else if (currentDialogue.options && currentLineIndex === currentDialogue.line.length) {
-        dialogueElement.innerText = ""; // Clear text for options
-        optionButtons.innerHTML = ""; // Clear previous options
-
-        currentDialogue.options.forEach((option, index) => {
-            const optionButton = document.createElement("button");
-            optionButton.innerText = option.text;
-            optionButton.addEventListener("click", () => {
-                currentDialogue = option.nextDialogue;
-                currentLineIndex = 0; // Reset line index for new dialogue
-                displayCurrentDialogue();
-            });
-            optionButtons.appendChild(optionButton);
-        });
-    } else {
-        dialogueElement.style.display = 'none'; // Hide dialogue box after options are finished
-        currentLineIndex = 0; // Reset line index for next interaction
-    }
-}
-*/

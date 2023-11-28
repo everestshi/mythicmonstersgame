@@ -1,13 +1,27 @@
-const luminiImage = new Image();
-luminiImage.src = '../images/Monsters/Magiscarf/Battlers Normal/Back/Lumini.png';
-const skelleksImage = new Image();
-skelleksImage.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Skelleks.png';
-const asterishImage = new Image();
-asterishImage.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Asterish.png';
-const pompetImage = new Image();
-pompetImage.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Pompet.png';
-const bonfurImage = new Image();
-bonfurImage.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Bonfur.png';
+const luminiImageBack = new Image();
+luminiImageBack.src = '../images/Monsters/Magiscarf/Battlers Normal/Back/Lumini.png';
+const luminiImageFront = new Image();
+luminiImageFront.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Lumini.png';
+
+const skelleksImageBack = new Image();
+skelleksImageBack.src = '../images/Monsters/Magiscarf/Battlers Normal/Back/Skelleks.png';
+const skelleksImageFront = new Image();
+skelleksImageFront.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Skelleks.png';
+
+const dampurrImageBack = new Image();
+dampurrImageBack.src = '../images/Monsters/Magiscarf/Battlers Normal/Back/Dampurr.png';
+const dampurrImageFront = new Image();
+dampurrImageFront.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Dampurr.png';
+
+const pompetImageBack = new Image();
+pompetImageBack.src = '../images/Monsters/Magiscarf/Battlers Normal/Back/Pompet.png';
+const pompetImageFront = new Image();
+pompetImageFront.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Pompet.png';
+
+const bonfurImageBack = new Image();
+bonfurImageBack.src = '../images/Monsters/Magiscarf/Battlers Normal/Back/Bonfur.png';
+const bonfurImageFront = new Image();
+bonfurImageFront.src = '../images/Monsters/Magiscarf/Battlers Normal/Front/Bonfur.png';
 
 // Define types and their advantages and disadvantages
 const typeMatchups = {
@@ -60,67 +74,87 @@ function getRandomLevel() {
 
 const monsters = {
     Lumini : {
-        image: luminiImage,
-        width: luminiImage.width * 1.5,
-        height: luminiImage.height * 1.5,
+        image: {
+          front: luminiImageFront,
+          back: luminiImageBack,
+        },
+        width: luminiImageFront.width * 1.5,
+        height: luminiImageFront.height * 1.5,
         name: 'Lumini',
         type: 'Light',
         level: 5,
         attacks: [attacks.Tackle, attacks.Lightball, attacks.Headbutt, attacks.MegaLightball],
-        baseHealth: 80,
-        baseAttack: 50,
+        baseHealth: 60,
+        baseAttack: 80,
         baseDefense: 50,
-        baseSpeed: 10,
+        baseSpeed: 60,
     },
 
     Skelleks: {
-        image: skelleksImage,
-        width: skelleksImage.width * 1.5,
-        height: skelleksImage.height * 1.5,
-        isEnemy: true,
+      image: {
+        front: skelleksImageFront,
+        back: skelleksImageBack,
+      },
+        width: skelleksImageFront.width * 1.5,
+        height: skelleksImageFront.height * 1.5,
         name: 'Skelleks',
         type: 'Dark',
         level: getRandomLevel(),
         attacks: [attacks.Tackle, attacks.Headbutt],
-        baseSpeed: 2,
+        baseHealth: 30,
+        baseAttack: 90,
+        baseDefense: 90,
+        baseSpeed: 10,
     },
     
-    Asterish: {
-        image: asterishImage,
-        width: asterishImage.width * 1.5,
-        height: asterishImage.height * 1.5,
-        isEnemy: true,
-        name: 'Asterish',
+    Dampurr: {
+      image: {
+        front: dampurrImageFront,
+        back: dampurrImageBack,
+      },
+        width: dampurrImageFront.width * 1.5,
+        height: dampurrImageFront.height * 1.5,
+        name: 'Dampurr',
         type: 'Water',
         level: getRandomLevel(),
         attacks: [attacks.Tackle, attacks.Headbutt],
-        baseSpeed: 5,
+        baseHealth: 40,
+        baseAttack: 60,
+        baseDefense: 40,
+        baseSpeed: 75,
     },
 
     Pompet: {
-        image: pompetImage,
-        width: pompetImage.width * 1.5,
-        height: pompetImage.height * 1.5,
-        isEnemy: true,
+      image: {
+        front: pompetImageFront,
+        back: pompetImageBack,
+      },
+        width: pompetImageFront.width * 1.5,
+        height: pompetImageFront.height * 1.5,
         name: 'Pompet',
         type: 'Grass',
         level: getRandomLevel(),
         attacks: [attacks.Tackle, attacks.Headbutt],
-        baseSpeed: 9,
+        baseHealth: 80,
+        baseAttack: 30,
+        baseDefense: 75,
+        baseSpeed: 20,
     },
 
     Bonfur: {
-        image: bonfurImage,
-        width: bonfurImage.width * 1.5,
-        height: bonfurImage.height * 1.5,
-        isEnemy: true,
+      image: {
+        front: bonfurImageFront,
+        back: bonfurImageBack,
+      },
+        width: bonfurImageFront.width * 1.5,
+        height: bonfurImageFront.height * 1.5,
         name: 'Bonfur',
         type: 'Fire',
-        level: 10,
+        level: getRandomLevel(),
         attacks: [attacks.Tackle, attacks.Headbutt, attacks.Lightball],
-        baseHealth: 40,
-        baseAttack: 70,
+        baseHealth: 50,
+        baseAttack: 80,
         baseDefense: 40,
-        baseSpeed: 7,
+        baseSpeed: 45,
     },
 }

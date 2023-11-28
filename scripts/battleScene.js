@@ -14,20 +14,17 @@ let renderedSprites;
 let battleAnimationId;
 let queue;
 
-function getRandomMonster() {
+function getEnemyMonster() {
   const monsterKeys = Object.keys(monsters);
-  const randomMonsterKey =
+  const enemyMonsterKey =
     monsterKeys[Math.floor(Math.random() * monsterKeys.length)];
-  return new Monster(monsters[randomMonsterKey]);
+  return new Monster(monsters[enemyMonsterKey]);
 }
 
 function initBattle() {
-  //const randomMonster = getRandomMonster();
-
   let myMonster = player.party[0];
-
-  const randomMonster = new Monster (monsters.Bonfur);
-  renderedSprites = [randomMonster, myMonster];
+  const enemyMonster = getEnemyMonster();
+  renderedSprites = [enemyMonster, myMonster];
   queue = [];
 
   const healthPercentage = (myMonster.health / myMonster.fullHealth) * 100;
@@ -36,8 +33,8 @@ function initBattle() {
   document.querySelector("#battleDialogue").style.display = "none";
   document.querySelector("#enemyCurrentHealth").style.width = "100%";
   document.querySelector("#myCurrentHealth").style.width = healthPercentage + "%";
-  document.querySelector("#enemyName").innerHTML = randomMonster.name;
-  document.querySelector("#enemyLvl").innerHTML = "Lv." + randomMonster.level;
+  document.querySelector("#enemyName").innerHTML = enemyMonster.name;
+  document.querySelector("#enemyLvl").innerHTML = "Lv." + enemyMonster.level;
   document.querySelector("#myName").innerHTML = myMonster.name;
   document.querySelector("#myLvl").innerHTML = "Lv." + myMonster.level;
   document.querySelector("#myHealthStat").innerHTML = myMonster.health;
@@ -102,12 +99,12 @@ function initBattle() {
 
         //enemy attack
         const randomAttack =
-          randomMonster.attacks[
-            Math.floor(Math.random() * randomMonster.attacks.length)
+          enemyMonster.attacks[
+            Math.floor(Math.random() * enemyMonster.attacks.length)
           ];
 
         queue.push(() => {
-          randomMonster.attackMethod({
+          enemyMonster.attackMethod({
             attack: randomAttack,
             recipient: myMonster,
           });
@@ -133,7 +130,7 @@ function initBattle() {
   runButton.addEventListener("click", () => {
     document.querySelector("#battleMenu").style.display = "none";
 
-    if (myMonster.speed > randomMonster.speed){
+    if (myMonster.speed > enemyMonster.speed){
       document.querySelector("#battleDialogue").style.display = "block";
       document.querySelector("#battleDialogue").innerHTML = "Ran away safely!";
 
@@ -146,7 +143,7 @@ function initBattle() {
       if (chance < 0.5) {
         document.querySelector("#battleDialogue").style.display = "block";
         document.querySelector("#battleDialogue").innerHTML = "Ran away safely!";
-  
+        queue = [];
         queue.push(() => {
           endBattleTransition();
         });
@@ -157,12 +154,12 @@ function initBattle() {
   
         //enemy attack
         const randomAttack =
-          randomMonster.attacks[
-            Math.floor(Math.random() * randomMonster.attacks.length)
+          enemyMonster.attacks[
+            Math.floor(Math.random() * enemyMonster.attacks.length)
           ];
   
         queue.push(() => {
-          randomMonster.attackMethod({
+          enemyMonster.attackMethod({
             attack: randomAttack,
             recipient: myMonster,
           });
@@ -205,15 +202,15 @@ function initBattle() {
         //my attack
         myMonster.attackMethod({
           attack: selectedAttack,
-          recipient: randomMonster,
+          recipient: enemyMonster,
         });
 
         //monster dies
-        if (randomMonster.health <= 0) {
+        if (enemyMonster.health <= 0) {
           queue.push(() => {
-            let expGained = Math.floor((randomMonster.level ** 2) * myMonster.level / 7 + 1);
+            let expGained = Math.floor((enemyMonster.level ** 2) * myMonster.level / 7 + 1);
             myMonster.gainExperience(expGained);
-            randomMonster.faint();
+            enemyMonster.faint();
           });
           queue.push(() => {
             endBattleTransition();
@@ -222,12 +219,12 @@ function initBattle() {
 
         //enemy attack
         const randomAttack =
-          randomMonster.attacks[
-            Math.floor(Math.random() * randomMonster.attacks.length)
+          enemyMonster.attacks[
+            Math.floor(Math.random() * enemyMonster.attacks.length)
           ];
 
         queue.push(() => {
-          randomMonster.attackMethod({
+          enemyMonster.attackMethod({
             attack: randomAttack,
             recipient: myMonster,
           });
