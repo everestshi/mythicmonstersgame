@@ -147,6 +147,17 @@ class NPC extends Sprite {
     });
     this.dialogue = dialogue;
     this.party = [];
+    this.isDefeated = false;
+  }
+  addToNpcParty(monster) {
+    if (this.party.length < 6) {
+      this.party.push(monster);
+    }
+  }
+  removeFromNpcParty(monsterName) {
+    if (this.party.length > 1) {
+      this.party = this.party.filter((monster) => monster.name !== monsterName);
+    }
   }
 }
 

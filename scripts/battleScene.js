@@ -14,16 +14,7 @@ let renderedSprites;
 let battleAnimationId;
 let queue;
 
-function getEnemyMonster() {
-  const monsterKeys = Object.keys(monsters);
-  const enemyMonsterKey =
-    monsterKeys[Math.floor(Math.random() * monsterKeys.length)];
-  return new Monster(monsters[enemyMonsterKey]);
-}
-
-function initBattle() {
-  let myMonster = player.party[0];
-  const enemyMonster = getEnemyMonster();
+function initBattle(enemyMonster, myMonster) {
   renderedSprites = [enemyMonster, myMonster];
   queue = [];
 
@@ -73,6 +64,10 @@ function initBattle() {
         gsap.to("#battleTransition", {
           opacity: 0,
         });
+        if (trainer1Monster.health <= 0){
+          console.log('beat trainer 1')
+          updateTrainer1Dialogue();
+        }
         battle.initiated = false;
       },
     });
@@ -264,6 +259,3 @@ document.querySelector("#battleDialogue").addEventListener("click", (e) => {
     e.currentTarget.style.display = "none";
   }
 });
-
-//initBattle();
-//animateBattle();

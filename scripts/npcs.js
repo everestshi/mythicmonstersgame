@@ -1,127 +1,4 @@
-//New game
-const game = new Game();
 
-// Load NPC images
-const npcProfessorImage = new Image();
-npcProfessorImage.src = "/images/NPCs/MM-Professor-Front.png";
-
-const npcLeaderImage = new Image();
-npcLeaderImage.src = "/images/NPCs/MM-leader.png";
-
-const npcBridgemanImage = new Image();
-npcBridgemanImage.src = "/images/NPCs/MM-bridgeman.png";
-
-const npcTrainerImage = new Image();
-npcTrainerImage.src = "/images/NPCs/MM-trainee.png";
-
-// Load Player Image
-const playerImage = new Image();
-playerImage.src = "../images/MM-Protagonist.png";
-
-//player sprite
-const player = new Player({
-  position: {
-    x: canvas.width / 2 - 24,
-    y: canvas.height / 2 - 60,
-  },
-  image: playerImage,
-  srcX: (playerImage.width / 56) * 3,
-  srcY: playerImage.height / 120,
-  srcWidth: playerImage.width / 56,
-  srcHeight: playerImage.height / 20,
-  width: playerImage.width / 56,
-  height: playerImage.height / 20,
-});
-
-//Professor sprite
-const professor = new NPC({
-  position: {
-    x: canvas.width / 2 + 200,
-    y: canvas.height / 2 - 200,
-  },
-  image: npcProfessorImage,
-  srcX: 0,
-  srcY: 0,
-  srcWidth: npcProfessorImage.width,
-  srcHeight: npcProfessorImage.height,
-  width: npcProfessorImage.width,
-  height: npcProfessorImage.height,
-});
-
-//Leader sprite
-const leader = new NPC({
-  position: {
-    x: canvas.width / 2 + 60,
-    y: canvas.height / 2 - 50,
-  },
-  image: npcLeaderImage,
-  srcX: 0,
-  srcY: 0,
-  srcWidth: npcProfessorImage.width,
-  srcHeight: npcProfessorImage.height,
-  width: npcProfessorImage.width,
-  height: npcProfessorImage.height,
-});
-
-//Bridgeman sprite
-const bridgeman = new NPC({
-    position: {
-        x: canvas.width / 2 + 300,
-        y: canvas.height / 2 - 200,
-    },
-    image: npcBridgemanImage,
-    srcX: (npcBridgemanImage.width / 4) * 2, // The third sprite (zero-indexed)
-    srcY: 0,
-    srcWidth: npcBridgemanImage.width / 4,
-    srcHeight: npcBridgemanImage.height,
-    width: npcBridgemanImage.width / 4,
-    height: npcBridgemanImage.height,
-});
-
-//Trainer1 sprite
-const trainer1 = new NPC({
-    position: {
-        x: canvas.width / 2 - 300,
-        y: canvas.height / 2 + 200,
-    },
-    image: npcTrainerImage,
-    srcX: (npcTrainerImage.width / 4) * 3, 
-    srcY: 0,
-    srcWidth: npcTrainerImage.width / 4,
-    srcHeight: npcTrainerImage.height,
-    width: npcTrainerImage.width / 4,
-    height: npcTrainerImage.height,
-});
-
-//Trainer2 sprite
-const trainer2 = new NPC({
-    position: {
-        x: canvas.width / 2 - 400,
-        y: canvas.height / 2 + 200,
-    },
-    image: npcTrainerImage,
-    srcX: (npcTrainerImage.width / 4) * 2, 
-    srcY: 0,
-    srcWidth: npcTrainerImage.width / 4,
-    srcHeight: npcTrainerImage.height,
-    width: npcTrainerImage.width / 4,
-    height: npcTrainerImage.height,
-});
-
-//Trainer3 sprite
-const trainer3 = new NPC({
-    position: {
-        x: canvas.width / 2 - 500,
-        y: canvas.height / 2 + 200,
-    },
-    image: npcTrainerImage,
-    srcX: (npcTrainerImage.width / 4), 
-    srcY: 0,
-    srcWidth: npcTrainerImage.width / 4,
-    srcHeight: npcTrainerImage.height,
-    width: npcTrainerImage.width / 4,
-    height: npcTrainerImage.height,
-});
 
 const npcs = [professor, leader, bridgeman, trainer1, trainer2, trainer3];
 
@@ -312,6 +189,35 @@ function hideNPCDialogue() {
         {
             line: "There's dangerous monsters beyond this bridge! I can't in good faith allow you to pass if you don't have any way of defending yourself!",
         },
+    ],
+    trainer1: [
+        {
+            line: "My Pompet is so cute! Get ready to be overwhelmed with cuteness! Ready to get smothered?",
+        },
+        {
+            options: [
+                {
+                    text: "Yes",
+                },
+                {
+                    text: "No",
+                    nextDialogue: [
+                        {line: ""},
+                        {line: "Aww, don't be shy!"},
+                    ]
+                },
+            ]
+        }
+    ],
+    trainer2: [
+        {
+            line: "Dampurr and I are in sync. Get ready to battle!",
+        },
+    ],
+    trainer3: [
+        {
+            line: "I've been training with Bonfur for over a year now! Here we go!",
+        },
     ]
 };
 
@@ -349,6 +255,15 @@ function updateBridgemanSprite() {
         ];
     }
 }
+
+function updateTrainer1Dialogue() {
+        npcDialogueTexts.trainer1 = [
+            { 
+                line: "...Pompet... you're not so cute anymore..." 
+            },
+        ];
+}
+
 
 function updateLeaderDialogue() {
     if (game.acceptedChallenge) {
@@ -422,12 +337,35 @@ function displayCurrentDialogue() {
                         updateBridgemanSprite();
                     } else if (currentNPCKey === 'leader' && option.text === 'Yes') {
                         game.setAcceptedChallenge(true);
-                        trainer1.draw();
-                        trainer2.draw();
-                        trainer3.draw();
                         updateLeaderDialogue();
-                    }
-                    
+                    } else if (currentNPCKey === 'trainer1' && option.text === 'Yes') {
+                        window.cancelAnimationFrame(animationId);
+                        battle.initiated = true;
+                        trainer1.removeFromNpcParty("Pompet")
+                        trainer1.addToNpcParty(trainer1Monster);
+                        gsap.to("#battleTransition", {
+                          opacity: 1,
+                          repeat: 3,
+                          yoyo: true,
+                          duration: 0.4,
+                          onComplete() {
+                            gsap.to("#battleTransition", {
+                              opacity: 1,
+                              duration: 0.4,
+                              onComplete() {
+                                //activate new animation loop
+                                initBattle(trainer1.party[0], player.party[0]);
+                                animateBattle();
+                                gsap.to("#battleTransition", {
+                                  opacity: 0,
+                                  duration: 0.4,
+                                });
+                              },
+                            });
+                          },
+                        });
+                    }          
+          
                     currentDialogue = option.nextDialogue; // Update current dialogue
                     currentLineIndex = 0; // Reset to the first line of new dialogue
                     displayCurrentDialogue(); // Display new dialogue
