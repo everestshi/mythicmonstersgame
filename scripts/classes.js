@@ -2,10 +2,10 @@
 //Game class Creation
 class Game {
   constructor() {
-      this.obtainedMonster = false;
-      this.acceptedChallenge = false;
-      this.beatenChallenge = false;
-      this.beatenLeader = false;
+      this.obtainedMonster = true;
+      this.acceptedChallenge = true;
+      this.beatenLeader = true;
+      this.endGame = true;
   }
 
   setMonsterObtained(value) {

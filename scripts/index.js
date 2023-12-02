@@ -17,6 +17,9 @@ npcBridgemanImage.src = "/images/NPCs/MM-bridgeman.png";
 const npcTrainerImage = new Image();
 npcTrainerImage.src = "/images/NPCs/MM-trainee.png";
 
+const npcBoatCaptainImage = new Image();
+npcBoatCaptainImage.src = "/images/NPCs/MM-boatcaptain.png";
+
 // Load Player Image
 const playerImage = new Image();
 playerImage.src = "../images/MM-Protagonist.png";
@@ -39,8 +42,8 @@ const player = new Player({
 //Professor sprite
 const professor = new NPC({
   position: {
-    x: canvas.width / 2 + 200,
-    y: canvas.height / 2 - 200,
+    x: canvas.width / 2 - 88,
+    y: canvas.height / 2 - 2350,
   },
   image: npcProfessorImage,
   srcX: 0,
@@ -52,10 +55,11 @@ const professor = new NPC({
 });
 
 //Leader sprite
+const leaderMonster = new Monster({...monsters.Fangtomask, level: 12});
 const leader = new NPC({
   position: {
-    x: canvas.width / 2 + 60,
-    y: canvas.height / 2 - 50,
+    x: canvas.width / 2 + 4265,
+    y: canvas.height / 2 - 2700,
   },
   image: npcLeaderImage,
   srcX: 0,
@@ -65,12 +69,13 @@ const leader = new NPC({
   width: npcProfessorImage.width,
   height: npcProfessorImage.height,
 });
+leader.addToNpcParty(leaderMonster);
 
 //Bridgeman sprite
 const bridgeman = new NPC({
     position: {
-        x: canvas.width / 2 + 300,
-        y: canvas.height / 2 - 200,
+        x: canvas.width / 2 + 1520,
+        y: canvas.height / 2 - 610,
     },
     image: npcBridgemanImage,
     srcX: (npcBridgemanImage.width / 4) * 2, // The third sprite (zero-indexed)
@@ -81,12 +86,27 @@ const bridgeman = new NPC({
     height: npcBridgemanImage.height,
 });
 
+//Bridgeman sprite
+const boatCaptain = new NPC({
+    position: {
+        x: canvas.width / 2 - 470,
+        y: canvas.height / 2 - 361,
+    },
+    image: npcBoatCaptainImage,
+    srcX: 0,
+    srcY: 0,
+    srcWidth: npcBoatCaptainImage.width,
+    srcHeight: npcBoatCaptainImage.height,
+    width: npcBoatCaptainImage.width,
+    height: npcBoatCaptainImage.height,
+});
+
 const trainer1Monster = new Monster({...monsters.Pompet, level: 10});
 //Trainer1 sprite
 const trainer1 = new NPC({
     position: {
-        x: canvas.width / 2 - 300,
-        y: canvas.height / 2 + 200,
+        x: canvas.width / 2 + 4710,
+        y: canvas.height / 2 - 612,
     },
     image: npcTrainerImage,
     srcX: (npcTrainerImage.width / 4) * 3, 
@@ -104,8 +124,8 @@ const trainer2Monster = new Monster({...monsters.Dampurr, level: 10});
 //Trainer2 sprite
 const trainer2 = new NPC({
     position: {
-        x: canvas.width / 2 - 400,
-        y: canvas.height / 2 + 200,
+        x: canvas.width / 2 + 2670,
+        y: canvas.height / 2 - 2406,
     },
     image: npcTrainerImage,
     srcX: (npcTrainerImage.width / 4) * 2, 
@@ -122,8 +142,8 @@ const trainer3Monster = new Monster({...monsters.Bonfur, level: 10});
 //Trainer3 sprite
 const trainer3 = new NPC({
     position: {
-        x: canvas.width / 2 - 500,
-        y: canvas.height / 2 + 200,
+        x: canvas.width / 2 + 4584,
+        y: canvas.height / 2 + 348,
     },
     image: npcTrainerImage,
     srcX: (npcTrainerImage.width / 4), 
@@ -366,10 +386,10 @@ function updatePlayerSprite() {
 }
 
 function getEnemyMonster() {
-    const monsterKeys = Object.keys(monsters);
+    const monsterKeys = Object.keys(wildMonsters);
     const enemyMonsterKey =
       monsterKeys[Math.floor(Math.random() * monsterKeys.length)];
-    return new Monster(monsters[enemyMonsterKey]);
+    return new Monster(wildMonsters[enemyMonsterKey]);
   }
 
 const movables = [
@@ -383,6 +403,7 @@ const movables = [
   trainer1,
   trainer2,
   trainer3,
+  boatCaptain
 ];
 
 //battle object
@@ -409,6 +430,9 @@ function animate() {
     trainer1.draw();
     trainer2.draw();
     trainer3.draw();
+  }
+  if (game.endGame) {
+    boatCaptain.draw();
   }
 
   player.draw();

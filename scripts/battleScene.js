@@ -65,8 +65,24 @@ function initBattle(enemyMonster, myMonster) {
           opacity: 0,
         });
         if (trainer1Monster.health <= 0){
-          console.log('beat trainer 1')
+          trainer1.isDefeated = true;
           updateTrainer1Dialogue();
+        }
+        if (trainer2Monster.health <= 0){
+          trainer2.isDefeated = true;
+          updateTrainer2Dialogue();
+        }
+        if (trainer3Monster.health <= 0){
+          trainer3.isDefeated = true;
+          updateTrainer3Dialogue();
+        }
+        if (trainer1.isDefeated && trainer2.isDefeated && trainer3.isDefeated){
+          updateLeaderDialogue();
+        }
+        if (leaderMonster.health <= 0){
+          game.beatenLeader = true;
+          updateLeaderDialogue();
+          updateProfessorDialogue();
         }
         battle.initiated = false;
       },
