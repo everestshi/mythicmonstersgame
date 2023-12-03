@@ -41,10 +41,10 @@ fangtomaskImageFront.src =
 const typeMatchups = {
   Normal: {
     superEffective: ["Dark"],
-    weakAgainst: ["Dark", "Fire", "Rock", "Electric"],
+    weakAgainst: ["Dark", "Rock", "Electric"],
   },
   Fire: {
-    superEffective: ["Grass", "Bug", "Dark", "Normal"],
+    superEffective: ["Grass", "Bug", "Dark", "Fire"],
     weakAgainst: ["Water", "Light", "Dark", "Rock"],
   },
   Water: {

@@ -289,7 +289,7 @@ function updateProfessorDialogue() {
             },
         ];
     }
-    if (game.beatenLeader) {
+    else if (game.beatenLeader) {
         npcDialogueTexts.professor = [
             { 
                 line: "Congratulations! I heard from the leader that you defeated him with ease. I can see that your bond with your partner has grown leaps and bounds." 
@@ -620,3 +620,276 @@ document.querySelector("#npcDialogue").addEventListener('click', () => {
         hideNPCDialogue();
     }
 });
+
+function resetNPCDialogues() {
+    npcDialogueTexts.professor = [
+        {
+            line: "Why hello there, young'un! How are you doing today?",
+        },
+        {
+            line: "...I see you grow weary of island life. Is coding all day on a tropical island truly not enough for you?",
+        },
+        {
+            line: "If that's the case, then why not become a Mythical Monster tamer? I, myself, am a Monster Researcher, and could use an assistant!",
+        },
+        {
+            line: "However, you will need to prove yourself first. The world of Mythical Monsters is deep, and dangerous, but there is much to explore.",
+        },
+        {
+            line: "I have tamed some beginner monsters that should be alright for you to handle. You may pick only one, that will already quite a difficult task to raise these fascinating creatures!",
+        },
+        {
+            line: "I have the Grass-type Pompet, the Water-type Dampurr, or the Fire-type Bonfur.",
+        },
+        {
+            line: "If you feel unsure, I also have the Light-type Lumini - it's very strong against most types, and weak to very few. It's also very fast!",
+        },
+        {
+            line: "However, if you are feeling confident, might I suggest the Dark-type Skelleks. It's learns attacks strong against anything and has amazing defense, but is also weak to all types and slow. A double edged blade, if you will!",
+        },
+        {
+            line: "Now then... who will you choose to be your partner? Think carefully, as it will be by your side for a long time.",
+        },
+        {
+            options: [
+                {
+                    text: "Pompet",
+                    nextDialogue: [
+                        { line: "" },
+                        { line: "So you've chosen the Grass-type Pompet!" },
+                        {
+                            line: "If you travel back to your town, there is a bridge to the East that you may cross over. You'll find yourself in an area teeming with wild Mythical Monsters where you can train with your partner!",
+                        },
+                        {
+                            line: "However, be warned - if your Monster loses all it's HitPoints, there will be nothing to protect you from the wild monsters in the area. You can heal your partner once per battle as an emergency, so be wise about your battles.",
+                        },
+                        {
+                            line: "On the other side of that area, the island leader will be waiting. Your first mission will be to seek him out and complete his tasks, he will train you and your partner to become stronger.",
+                        },
+                        {
+                            line: "After you beat him, come back to me, and then we can talk about what your next task will be.",
+                        },
+                    ]
+                },
+                {
+                    text: "Dampurr",
+                    nextDialogue: [
+                        {line: ""},
+                        {line: "So you've chosen the Water-type Dampurr!"},
+                        {
+                            line: "If you travel back to your town, there is a bridge to the East that you may cross over. You'll find yourself in an area teeming with wild Mythical Monsters where you can train with your partner!",
+                        },
+                        {
+                            line: "However, be warned - if your Monster loses all it's HitPoints, there will be nothing to protect you from the wild monsters in the area. You can heal your partner once per battle as an emergency, so be wise about your battles.",
+                        },
+                        {
+                            line: "On the other side of that area, our island leader will be waiting. Your first mission will be to seek him out and complete his tasks, he will train you and your partner to become stronger.",
+                        },
+                        {
+                            line: "After you beat him, come back to me, and then we can talk about what your next task will be.",
+                        },
+                    ]
+                },
+                {
+                    text: "Bonfur",
+                    nextDialogue: [
+                        {line: ""},
+                        {line: "So you've chosen the Fire-type Bonfur!"},
+                        {
+                            line: "If you travel back to your town, there is a bridge to the East that you may cross over. You'll find yourself in an area teeming with wild Mythical Monsters where you can train with your partner!",
+                        },
+                        {
+                            line: "However, be warned - if your Monster loses all it's HitPoints, there will be nothing to protect you from the wild monsters in the area. You can heal your partner once per battle as an emergency, so be wise about your battles.",
+                        },
+                        {
+                            line: "On the other side of that area, our island leader will be waiting. Your first mission will be to seek him out and complete his tasks, he will train you and your partner to become stronger.",
+                        },
+                        {
+                            line: "After you beat him, come back to me, and then we can talk about what your next task will be.",
+                        },
+                    ]
+                },
+                {
+                    text: "Lumini",
+                    nextDialogue: [
+                        {line: ""},
+                        {line: "So you've chosen the Light-type Lumini!"},
+                        {
+                            line: "If you travel back to your town, there is a bridge to the East that you may cross over. You'll find yourself in an area teeming with wild Mythical Monsters where you can train with your partner!",
+                        },
+                        {
+                            line: "However, be warned - if your Monster loses all it's HitPoints, there will be nothing to protect you from the wild monsters in the area. You can heal your partner once per battle as an emergency, so be wise about your battles.",
+                        },
+                        {
+                            line: "On the other side of that area, our island leader will be waiting. Your first mission will be to seek him out and complete his tasks, he will train you and your partner to become stronger.",
+                        },
+                        {
+                            line: "After you beat him, come back to me, and then we can talk about what your next task will be.",
+                        },
+                    ]
+                },
+                {
+                    text: "Skelleks",
+                    nextDialogue: [
+                        {line: ""},
+                        {line: "So you've chosen the Dark-type Skelleks!"},
+                        {
+                            line: "If you travel back to your town, there is a bridge to the East that you may cross over. You'll find yourself in an area teeming with wild Mythical Monsters where you can train with your partner!",
+                        },
+                        {
+                            line: "However, be warned - if your Monster loses all it's HitPoints, there will be nothing to protect you from the wild monsters in the area. You can heal your partner once per battle as an emergency, so be wise about your battles.",
+                        },
+                        {
+                            line: "On the other side of that area, our island leader will be waiting. Your first mission will be to seek him out and complete his tasks, he will train you and your partner to become stronger.",
+                        },
+                        {
+                            line: "After you beat him, come back to me, and then we can talk about what your next task will be.",
+                        },
+                    ]
+                }
+            ]
+        },
+    ],
+    npcDialogueTexts.leader = [
+        {
+            line: "Greetings, challenger! So, the professor has sent you here to undergo training, eh? Well it won't be easy!",
+        },
+        {
+            line: "In fact, before I take you under my wing, you will need to prove that you are worthy of my training. I will send three of my disciples across the island - find them and defeat them.",
+        },
+        {
+            line: "Will you undergo my challenge?",
+        },
+        {
+            options: [
+                {
+                    text: "Yes",
+                    nextDialogue: [
+                        { line: "" },
+                        {
+                            line: "Fantastic! Now, before you leave, allow me to impart some battle knowledge: ",
+                        },
+                        {
+                            line: "Each monster has a certain type, and there are move types that can be very effective or not effective at all against it.",
+                        },
+                        {
+                            line: "Each monster also has a Hitpoint, Attack, Defense, and Speed stat. Understanding how these relate to each other and to your opponent would be wise.",
+                        },
+                        {
+                            line: "Finally, your monster will grow stronger every time it defeats another, so train it well! However, it only takes a single loss for all of this to end, so be careful.",
+                        },
+                        {
+                            line: "Best of luck, young one! I will be here waiting!",
+                        },
+                    ]
+                },
+                {
+                    text: "No",
+                    nextDialogue: [
+                        {line: ""},
+                        {line: "That is alright. I will be here whenever you feel ready to attempt my challenge!"},
+                    ]
+                },
+            ]
+        },
+    ],
+    npcDialogueTexts.bridgeman = [
+        {
+            line: "There's dangerous monsters beyond this bridge! I can't in good faith allow you to pass if you don't have any way of defending yourself!",
+        },
+    ],
+    npcDialogueTexts.trainer1 = [
+        {
+            line: "My Pompet is so cute! Get ready to be overwhelmed with cuteness! Ready to get smothered?",
+        },
+        {
+            options: [
+                {
+                    text: "Yes",
+                },
+                {
+                    text: "No",
+                    nextDialogue: [
+                        {line: ""},
+                        {line: "Aww, don't be shy!"},
+                    ]
+                },
+            ]
+        }
+    ],
+    npcDialogueTexts.trainer2 = [
+        {
+            line: "Dampurr and I are in sync. Are you ready to battle?",
+        },
+        {
+            options: [
+                {
+                    text: "Yes",
+                },
+                {
+                    text: "No",
+                    nextDialogue: [
+                        {line: ""},
+                        {line: "Then don't disturb us! We'll be out of sync!"},
+                    ]
+                },
+            ]
+        }
+    ],
+    npcDialogueTexts.trainer3 = [
+        {
+            line: "I've been training with Bonfur for over a year now! Here we go!",
+        },
+        {
+            options: [
+                {
+                    text: "Yes",
+                },
+                {
+                    text: "No",
+                    nextDialogue: [
+                        {line: ""},
+                        {line: "Haha, looks like we have more training than you!"},
+                    ]
+                },
+            ]
+        }
+    ],
+    npcDialogueTexts.boatCaptain = [
+        {
+            line: "Hello young one! The professor told me about your next task. Ready to start your adventure?",
+        },
+        {
+            options: [
+                {
+                    text: "Yes",
+                },
+                {
+                    text: "No",
+                    nextDialogue: [
+                        {line: ""},
+                        {line: "That's alright, I'll be around for awhile so just come back when you're ready."},
+                    ]
+                },
+            ]
+        }
+    ]
+}
+
+
+function resetMMGame() {
+    playerDirection = "down";
+    background.position.x = offset.x;
+    background.position.y = offset.y;
+    foreground.position.x = offset.x;
+    foreground.position.y = offset.y;
+    resetBattleZones();
+    resetBoundaries();
+    resetNPCPositions();
+    resetNPCDialogues();
+    game.obtainedMonster = false;
+    game.acceptedChallenge = false;
+    game.beatenLeader = false;
+    game.endGame = false;
+    player.party = [];
+}

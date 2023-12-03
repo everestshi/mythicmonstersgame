@@ -84,6 +84,9 @@ function initBattle(enemyMonster, myMonster) {
           updateLeaderDialogue();
           updateProfessorDialogue();
         }
+        if (player.party[0].health <= 0){
+          handleFaint();
+        }
         battle.initiated = false;
       },
     });
@@ -275,3 +278,24 @@ document.querySelector("#battleDialogue").addEventListener("click", (e) => {
     e.currentTarget.style.display = "none";
   }
 });
+
+// Function to handle faint scenario
+function handleFaint() {
+  const gameScreen = document.getElementById("gameScreen");
+  const gameOverScreen = document.getElementById("gameOverScreen");
+
+  // Hide game screen and show game over screen
+  gameOverScreen.style.display = "block"
+  //gameScreen.style.display = "none";
+
+  // Restart button click event
+  const restartButton = document.getElementById("restartButton");
+  restartButton.addEventListener("click", function () {
+    // Reset the game
+    resetMMGame();
+
+    // Show the game screen and hide game over screen
+    //gameScreen.style.display = "inline-block";
+    gameOverScreen.style.display = "none";
+  });
+}

@@ -12,6 +12,27 @@
 <body>
     <div id="gameScreen">
         <div id="battleTransition"></div>
+        <div id="gameOverScreen">
+            <h1>Game Over!</h1>
+            <p>You fainted!</p>
+            <button id="restartButton">Restart</button>
+          </div>
+        <div id="menu" class="menu hidden">
+            <button id="playerInfo">Player Information</button>
+            <button id="monsterStats">Monster Stats</button>
+            <button id="instructionScreen">Instruction Screen</button>
+            <button id="resetGame">Reset Game</button>
+            <button id="closeMenu">Close Menu</button>
+        </div>
+        <div class="confirmation-screen" id="confirmationScreen">
+            <div class="confirmation-box">
+              <p class="confirmation-message">Are you sure you want to reset the game?</p>
+              <div class="confirmation-buttons">
+                <button class="confirmation-button" id="yesButton">Yes</button>
+                <button class="confirmation-button" id="noButton">No</button>
+              </div>
+            </div>
+          </div>
         <div id="npcDialogue">
             <div id="npcDialogueLine"></div>
             <div id="npcOptions"></div>
