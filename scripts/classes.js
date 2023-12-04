@@ -2,10 +2,10 @@
 //Game class Creation
 class Game {
   constructor() {
-      this.obtainedMonster = true;
-      this.acceptedChallenge = true;
-      this.beatenLeader = true;
-      this.endGame = true;
+      this.obtainedMonster = false;
+      this.acceptedChallenge = false;
+      this.beatenLeader = false;
+      this.endGame = false;
   }
 
   setMonsterObtained(value) {
@@ -108,6 +108,7 @@ class Player extends Sprite {
       height,
     });
     this.party = [];
+    this.name = "";
   }
 
   addToParty(monster) {

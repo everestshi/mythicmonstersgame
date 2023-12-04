@@ -37,6 +37,34 @@ const fangtomaskImageFront = new Image();
 fangtomaskImageFront.src =
   "../images/Monsters/Magiscarf/Battlers Normal/Front/Fangtomask.png";
 
+
+
+
+//Wild Monsters
+const upsparkImageFront = new Image();
+upsparkImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Upspark.png";
+
+const blonkImageFront = new Image();
+blonkImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Blonk.png";
+
+const rootsyImageFront = new Image();
+rootsyImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Rootsy.png";
+
+const chickiteImageFront = new Image();
+chickiteImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Chickite.png";
+
+const fryrryImageFront = new Image();
+fryrryImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Fryrry.png";
+
+const chartailImageFront = new Image();
+chartailImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Chartail.png";
+
+const flooieImageFront = new Image();
+flooieImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Flooie.png";
+
+const burrubImageFront = new Image();
+burrubImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Burrub.png";
+
 // Define types and their advantages and disadvantages
 const typeMatchups = {
   Normal: {
@@ -146,6 +174,7 @@ function getRandomLevel() {
 const monsters = {
   Lumini: {
     image: {
+      source: "../images/Monsters/Magiscarf/Battlers Normal/Front/Lumini.png",
       front: luminiImageFront,
       back: luminiImageBack,
     },
@@ -169,6 +198,7 @@ const monsters = {
 
   Skelleks: {
     image: {
+      source: "../images/Monsters/Magiscarf/Battlers Normal/Front/Skelleks.png",
       front: skelleksImageFront,
       back: skelleksImageBack,
     },
@@ -187,6 +217,7 @@ const monsters = {
 
   Dampurr: {
     image: {
+      source: "../images/Monsters/Magiscarf/Battlers Normal/Front/Dampurr.png",
       front: dampurrImageFront,
       back: dampurrImageBack,
     },
@@ -205,6 +236,7 @@ const monsters = {
 
   Pompet: {
     image: {
+      source: "../images/Monsters/Magiscarf/Battlers Normal/Front/Pompet.png",
       front: pompetImageFront,
       back: pompetImageBack,
     },
@@ -223,6 +255,7 @@ const monsters = {
 
   Bonfur: {
     image: {
+      source: "../images/Monsters/Magiscarf/Battlers Normal/Front/Bonfur.png",
       front: bonfurImageFront,
       back: bonfurImageBack,
     },
@@ -257,15 +290,15 @@ const monsters = {
 };
 
 const wildMonsters = {
-  Pompet: {
+  Upspark: {
     image: {
-      front: pompetImageFront,
-      back: pompetImageBack,
+      front: upsparkImageFront,
+      back: "",
     },
-    width: pompetImageFront.width * 1.5,
-    height: pompetImageFront.height * 1.5,
-    name: "Pompet",
-    type: "Grass",
+    width: upsparkImageFront.width * 1.5,
+    height: upsparkImageFront.height * 1.5,
+    name: "Upspark",
+    type: "Electric",
     level: getRandomLevel(),
     attacks: [attacks.Tackle, attacks.Headbutt],
     baseHealth: 80,
@@ -274,15 +307,117 @@ const wildMonsters = {
     baseSpeed: 20,
   },
 
-  Bonfur: {
+  Blonk: {
     image: {
-      front: bonfurImageFront,
-      back: bonfurImageBack,
+      front: blonkImageFront,
+      back: "",
     },
-    width: bonfurImageFront.width * 1.5,
-    height: bonfurImageFront.height * 1.5,
-    name: "Bonfur",
+    width: blonkImageFront.width * 1.5,
+    height: blonkImageFront.height * 1.5,
+    name: "Blonk",
+    type: "Rock",
+    level: getRandomLevel(),
+    attacks: [attacks.Tackle, attacks.Headbutt, attacks.Lightball],
+    baseHealth: 50,
+    baseAttack: 80,
+    baseDefense: 40,
+    baseSpeed: 45,
+  },
+
+  Rootsy: {
+    image: {
+      front: rootsyImageFront,
+      back: "",
+    },
+    width: rootsyImageFront.width * 1.5,
+    height: rootsyImageFront.height * 1.5,
+    name: "Rootsy",
+    type: "Normal",
+    level: getRandomLevel(),
+    attacks: [attacks.Tackle, attacks.Headbutt, attacks.Lightball],
+    baseHealth: 50,
+    baseAttack: 80,
+    baseDefense: 40,
+    baseSpeed: 45,
+  },
+
+  Chickite: {
+    image: {
+      front: chickiteImageFront,
+      back: "",
+    },
+    width: chickiteImageFront.width * 1.5,
+    height: chickiteImageFront.height * 1.5,
+    name: "Chickite",
+    type: "Flying",
+    level: getRandomLevel(),
+    attacks: [attacks.Tackle, attacks.Headbutt, attacks.Lightball],
+    baseHealth: 50,
+    baseAttack: 80,
+    baseDefense: 40,
+    baseSpeed: 45,
+  },
+
+  Fryryy: {
+    image: {
+      front: fryrryImageFront,
+      back: "",
+    },
+    width: fryrryImageFront.width * 1.5,
+    height: fryrryImageFront.height * 1.5,
+    name: "Fryrry",
+    type: "Bug",
+    level: getRandomLevel(),
+    attacks: [attacks.Tackle, attacks.Headbutt, attacks.Lightball],
+    baseHealth: 50,
+    baseAttack: 80,
+    baseDefense: 40,
+    baseSpeed: 45,
+  },
+
+  Chartail: {
+    image: {
+      front: chartailImageFront,
+      back: "",
+    },
+    width: chartailImageFront.width * 1.5,
+    height: chartailImageFront.height * 1.5,
+    name: "Chartail",
     type: "Fire",
+    level: getRandomLevel(),
+    attacks: [attacks.Tackle, attacks.Headbutt, attacks.Lightball],
+    baseHealth: 50,
+    baseAttack: 80,
+    baseDefense: 40,
+    baseSpeed: 45,
+  },
+
+  Flooie: {
+    image: {
+      front: flooieImageFront,
+      back: "",
+    },
+    width: flooieImageFront.width * 1.5,
+    height: flooieImageFront.height * 1.5,
+    name: "Flooie",
+    type: "Water",
+    level: getRandomLevel(),
+    attacks: [attacks.Tackle, attacks.Headbutt, attacks.Lightball],
+    baseHealth: 50,
+    baseAttack: 80,
+    baseDefense: 40,
+    baseSpeed: 45,
+  },
+
+  Burrub: {
+    image: {
+      front: burrubImageFront,
+      back: "",
+    },
+    width: burrubImageFront.width * 1.5,
+    height: burrubImageFront.height * 1.5,
+    name: "Burrub",
+    type: "Grass",
     level: getRandomLevel(),
     attacks: [attacks.Tackle, attacks.Headbutt, attacks.Lightball],
     baseHealth: 50,

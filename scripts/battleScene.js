@@ -23,25 +23,28 @@ function initBattle(enemyMonster, myMonster) {
   document.querySelector("#userInterface").style.display = "block";
   document.querySelector("#battleDialogue").style.display = "none";
   document.querySelector("#enemyCurrentHealth").style.width = "100%";
-  document.querySelector("#myCurrentHealth").style.width = healthPercentage + "%";
+  document.querySelector("#myCurrentHealth").style.width =
+    healthPercentage + "%";
   document.querySelector("#enemyName").innerHTML = enemyMonster.name;
   document.querySelector("#enemyLvl").innerHTML = "Lv." + enemyMonster.level;
   document.querySelector("#myName").innerHTML = myMonster.name;
   document.querySelector("#myLvl").innerHTML = "Lv." + myMonster.level;
   document.querySelector("#myHealthStat").innerHTML = myMonster.health;
-  document.querySelector("#MyTotalHealthStat").innerHTML = "/" + myMonster.fullHealth;
+  document.querySelector("#MyTotalHealthStat").innerHTML =
+    "/" + myMonster.fullHealth;
   document.querySelector("#attacks").replaceChildren();
-  
+
   function clearEventListeners() {
     queue = [];
     document.querySelector("#battleDialogue").style.display = "none";
     const buttonsContainer = document.querySelector("#attacks");
-    buttonsContainer.innerHTML = ''; // Clear the current buttons
-  
+    buttonsContainer.innerHTML = ""; // Clear the current buttons
+
     // Call a function to populate attacks for my monster
     myMonster.attacks.forEach((attack) => {
       const button = document.createElement("button");
       button.innerHTML = attack.name;
+      button.classList.add("attackButton"); // Add the class
       document.querySelector("#attacks").append(button);
     });
   }
@@ -59,32 +62,31 @@ function initBattle(enemyMonster, myMonster) {
       onComplete: () => {
         cancelAnimationFrame(battleAnimationId);
         animate();
-        document.querySelector("#userInterface").style.display =
-          "none";
+        document.querySelector("#userInterface").style.display = "none";
         gsap.to("#battleTransition", {
           opacity: 0,
         });
-        if (trainer1Monster.health <= 0){
+        if (trainer1Monster.health <= 0) {
           trainer1.isDefeated = true;
           updateTrainer1Dialogue();
         }
-        if (trainer2Monster.health <= 0){
+        if (trainer2Monster.health <= 0) {
           trainer2.isDefeated = true;
           updateTrainer2Dialogue();
         }
-        if (trainer3Monster.health <= 0){
+        if (trainer3Monster.health <= 0) {
           trainer3.isDefeated = true;
           updateTrainer3Dialogue();
         }
-        if (trainer1.isDefeated && trainer2.isDefeated && trainer3.isDefeated){
+        if (trainer1.isDefeated && trainer2.isDefeated && trainer3.isDefeated) {
           updateLeaderDialogue();
         }
-        if (leaderMonster.health <= 0){
+        if (leaderMonster.health <= 0) {
           game.beatenLeader = true;
           updateLeaderDialogue();
-          updateProfessorDialogue();
+          updateProfessorDialogueFinal();
         }
-        if (player.party[0].health <= 0){
+        if (player.party[0].health <= 0) {
           handleFaint();
         }
         battle.initiated = false;
@@ -111,78 +113,88 @@ function initBattle(enemyMonster, myMonster) {
 
       queue = []; // Clear the queue after healing
 
-        //enemy attack
-        const randomAttack =
-          enemyMonster.attacks[
-            Math.floor(Math.random() * enemyMonster.attacks.length)
-          ];
+      //enemy attack
+      const randomAttack =
+        enemyMonster.attacks[
+          Math.floor(Math.random() * enemyMonster.attacks.length)
+        ];
 
-        queue.push(() => {
-          enemyMonster.attackMethod({
-            attack: randomAttack,
-            recipient: myMonster,
-          });
-
-          if (myMonster.health <= 0) {
-            queue.push(() => {
-              myMonster.faint();
-            });
-            queue.push(() => {
-              endBattleTransition();
-            });
-          }
-          queue.push(() => {
-            clearEventListeners();
-            displayBattleMenu();
-          });
+      queue.push(() => {
+        enemyMonster.attackMethod({
+          attack: randomAttack,
+          recipient: myMonster,
         });
-    }); 
+
+        if (myMonster.health <= 0) {
+          queue.push(() => {
+            myMonster.faint();
+          });
+          queue.push(() => {
+            queue = [];
+            endBattleTransition();
+          });
+        }
+        queue.push(() => {
+          clearEventListeners();
+          displayBattleMenu();
+        });
+      });
+    });
   }
+
+  const battleMenuStats = document.getElementById("statsOption");
+  battleMenuStats.addEventListener("click", function () {
+    monsterStats.style.display = "flex";
+  });
+
 
   const runButton = document.querySelector("#runOption");
   clearEventListeners();
   runButton.addEventListener("click", () => {
     document.querySelector("#battleMenu").style.display = "none";
 
-    if (myMonster.speed > enemyMonster.speed){
+    if (myMonster.speed > enemyMonster.speed) {
       document.querySelector("#battleDialogue").style.display = "block";
       document.querySelector("#battleDialogue").innerHTML = "Ran away safely!";
+      queue = [];
 
       queue.push(() => {
         endBattleTransition();
       });
-
     } else {
       const chance = Math.random();
       if (chance < 0.5) {
-        document.querySelector("#battleDialogue").style.display = "block";
-        document.querySelector("#battleDialogue").innerHTML = "Ran away safely!";
         queue = [];
+        document.querySelector("#battleDialogue").style.display = "block";
+        document.querySelector("#battleDialogue").innerHTML =
+          "Ran away safely!";
         queue.push(() => {
           endBattleTransition();
         });
       } else {
         document.querySelector("#battleDialogue").style.display = "block";
-        document.querySelector("#battleDialogue").innerHTML = "Unable to run away!";
-        queue = []; // Clear the queue after healing
-  
+        document.querySelector("#battleDialogue").innerHTML =
+          "Unable to run away!";
+        queue = []; 
+
         //enemy attack
         const randomAttack =
           enemyMonster.attacks[
             Math.floor(Math.random() * enemyMonster.attacks.length)
           ];
-  
+
         queue.push(() => {
           enemyMonster.attackMethod({
             attack: randomAttack,
             recipient: myMonster,
           });
-  
+
           if (myMonster.health <= 0) {
             queue.push(() => {
               myMonster.faint();
             });
             queue.push(() => {
+              queue = [];
               endBattleTransition();
             });
           }
@@ -193,14 +205,11 @@ function initBattle(enemyMonster, myMonster) {
         });
       }
     }
-
   });
 
-
   function attachAttackListeners() {
-    const attackButtons = document.querySelectorAll("button");
+    const attackButtons = document.querySelectorAll(".attackButton");
     attackButtons.forEach((button) => {
-      
       button.addEventListener("mouseenter", (e) => {
         const selectedAttack = attacks[e.currentTarget.innerHTML];
 
@@ -222,11 +231,14 @@ function initBattle(enemyMonster, myMonster) {
         //monster dies
         if (enemyMonster.health <= 0) {
           queue.push(() => {
-            let expGained = Math.floor((enemyMonster.level ** 2) * myMonster.level / 7 + 1);
+            let expGained = Math.floor(
+              (enemyMonster.level ** 2 * myMonster.level) / 7 + 1
+            );
             myMonster.gainExperience(expGained);
             enemyMonster.faint();
           });
           queue.push(() => {
+            queue = [];
             endBattleTransition();
           });
         }
@@ -248,6 +260,7 @@ function initBattle(enemyMonster, myMonster) {
               myMonster.faint();
             });
             queue.push(() => {
+              queue = [];
               endBattleTransition();
             });
           }
@@ -258,11 +271,11 @@ function initBattle(enemyMonster, myMonster) {
       });
     });
   }
-
   showBattleMenu();
 }
 
 function animateBattle() {
+  populateCurrentMonsterDetails();
   battleAnimationId = window.requestAnimationFrame(animateBattle);
   battleBackground.draw();
   renderedSprites.forEach((sprite) => {
@@ -281,21 +294,14 @@ document.querySelector("#battleDialogue").addEventListener("click", (e) => {
 
 // Function to handle faint scenario
 function handleFaint() {
-  const gameScreen = document.getElementById("gameScreen");
   const gameOverScreen = document.getElementById("gameOverScreen");
+  disablePlayerMovement();
 
-  // Hide game screen and show game over screen
-  gameOverScreen.style.display = "block"
-  //gameScreen.style.display = "none";
+  gameOverScreen.style.display = "block";
 
-  // Restart button click event
   const restartButton = document.getElementById("restartButton");
   restartButton.addEventListener("click", function () {
-    // Reset the game
     resetMMGame();
-
-    // Show the game screen and hide game over screen
-    //gameScreen.style.display = "inline-block";
     gameOverScreen.style.display = "none";
   });
 }

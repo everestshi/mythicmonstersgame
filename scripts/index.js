@@ -23,6 +23,120 @@ npcBoatCaptainImage.src = "/images/NPCs/MM-boatcaptain.png";
 const playerImage = new Image();
 playerImage.src = "../images/MM-Protagonist.png";
 
+const keys = {
+  arrowUp: {
+    pressed: false,
+  },
+  arrowRight: {
+    pressed: false,
+  },
+  arrowDown: {
+    pressed: false,
+  },
+  arrowLeft: {
+    pressed: false,
+  },
+};
+
+let animationId;
+
+
+const controlsButton = document.getElementById("controlButton");
+const controlsScreen = document.getElementById("controlsScreen");
+const closeControls = document.getElementById("closeControls");
+
+
+controlsButton.addEventListener("click", function () {
+  controlsScreen.style.display = "flex";
+});
+
+closeControls.addEventListener("click", function () {
+  controlsScreen.style.display = "none";
+  playerDirection = currentPlayerDirection;
+});
+
+const monsterStats = document.getElementById("monster-stats");
+const closeStats = document.getElementById("closeStats");
+closeStats.addEventListener("click", function () {
+    monsterStats.style.display = "none";
+    if (!battle.initiated){
+        playerDirection = currentPlayerDirection;
+    }
+});
+
+  function populateCurrentMonsterDetails() {
+    const currentMonsterData = monsters[player.party[0].name]; // Retrieve the monster data by name
+    document.getElementById("monsterOwner").textContent =
+      "Monster Owner: " + player.name; // Example owner name
+    document.getElementById("monsterFrontImage").src =
+    currentMonsterData.image.source;
+    document.getElementById("monsterName").textContent =
+    currentMonsterData.name;
+    document.getElementById("monsterLevel").textContent =
+      "Level: " + player.party[0].level;
+    document.getElementById("monsterType").textContent =
+      "Type: " + currentMonsterData.type;
+    document.getElementById("expToNextLevel").textContent =
+    player.party[0].currentExperience +
+      "/" +
+      player.party[0].experienceToNextLevel; // Example experience needed to next level
+    document.getElementById("monsterHealth").textContent =
+    player.party[0].health + "/" + player.party[0].fullHealth;
+    document.getElementById("monsterAttack").textContent =
+    player.party[0].attack;
+    document.getElementById("monsterDefense").textContent =
+    player.party[0].defense;
+    document.getElementById("monsterSpeed").textContent =
+    player.party[0].speed;
+
+    const attacksList = document.getElementById("monsterAttacks");
+    attacksList.innerHTML = "";
+    currentMonsterData.attacks.forEach((attack) => {
+      const li = document.createElement("li");
+      li.textContent = attack.name;
+      attacksList.appendChild(li);
+    });
+  }
+
+  function resetCurrentMonsterDetails() {
+    document.getElementById("monsterOwner").textContent = "Monster Owner: " + player.name;
+    document.getElementById("monsterFrontImage").src = "";
+    document.getElementById("monsterName").textContent = "";
+    document.getElementById("monsterLevel").textContent = "Level: ";
+    document.getElementById("monsterType").textContent = "Type: ";
+    document.getElementById("expToNextLevel").textContent = "";
+    document.getElementById("monsterHealth").textContent = "";
+    document.getElementById("monsterAttack").textContent = "";
+    document.getElementById("monsterDefense").textContent = "";
+    document.getElementById("monsterSpeed").textContent = "";
+  
+    const attacksList = document.getElementById("monsterAttacks");
+    attacksList.innerHTML = "";
+  }
+  
+
+let canPlayerMove = false; // Flag to control player movement
+
+// Function to handle player movement
+function handlePlayerMovement() {
+  if (!canPlayerMove) {
+    keys.arrowUp.pressed = false;
+    keys.arrowRight.pressed = false;
+    keys.arrowDown.pressed = false;
+    keys.arrowLeft.pressed = false;
+  }
+}
+
+// Function to disable player movement
+function disablePlayerMovement() {
+  canPlayerMove = false;
+}
+
+// Function to enable player movement
+function enablePlayerMovement() {
+  canPlayerMove = true;
+}
+
 //player sprite
 const player = new Player({
   position: {
@@ -37,6 +151,39 @@ const player = new Player({
   width: playerImage.width / 56,
   height: playerImage.height / 20,
 });
+
+let playerDirection = "down"; // Set the default direction
+let currentPlayerDirection = "";
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const openingScreen = document.getElementById("openingScreen");
+  const gameScreen = document.getElementById("gameScreen");
+  const nameForm = document.getElementById("nameForm");
+  const playerNameInput = document.getElementById("playerName");
+
+  // Check if player.name exists and prepopulate the input field if it does
+  if (player.name) {
+    playerNameInput.value = player.name;
+  }
+
+  nameForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const playerNameInputValue = playerNameInput.value;
+    if (playerNameInputValue.trim() !== "") {
+      player.name = playerNameInputValue;
+      openingScreen.style.display = "none";
+      gameScreen.style.display = "inline-block"; // Show the game screen
+      // Additional logic or function calls to start the game can go here
+      enablePlayerMovement();
+      resetCurrentMonsterDetails();
+      playerDirection = "down";
+    } else {
+      alert("Please enter a valid name!");
+    }
+  });
+});
+
 
 //Professor sprite
 let professor = new NPC({
@@ -217,21 +364,6 @@ const foreground = new Sprite({
   image: foregroundImage,
 });
 
-const keys = {
-  arrowUp: {
-    pressed: false,
-  },
-  arrowRight: {
-    pressed: false,
-  },
-  arrowDown: {
-    pressed: false,
-  },
-  arrowLeft: {
-    pressed: false,
-  },
-};
-
 //collision function
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
@@ -367,7 +499,6 @@ const playerFrames = {
 };
 
 // Initialize player direction and frame index
-let playerDirection = "down"; // Set the default direction
 let frameIndex = 0; // Current frame index
 const frameDelay = 30; // Delay between frame changes
 let lastFrameTime = 0; // Variable to keep track of the last frame time
@@ -408,7 +539,6 @@ const battle = {
   initiated: false,
 };
 
-let animationId;
 //animation loop
 function animate() {
   animationId = window.requestAnimationFrame(animate);
@@ -431,9 +561,10 @@ function animate() {
   if (game.endGame) {
     boatCaptain.draw();
   }
-
   player.draw();
   foreground.draw();
+
+  handlePlayerMovement();
 
   //player movement
   let moving = true;
@@ -462,7 +593,6 @@ function animate() {
       ) {
         frameIndex = 0;
         updatePlayerSprite();
-        console.log("activate battle");
         let myMonster = player.party[0];
         let enemyMonster = getEnemyMonster();
 
@@ -718,112 +848,7 @@ function animate() {
   }
 }
 
-// Wait for images to load NEED TO ADD FOREGROUND AND BOUNDARY
-image.onload = function () {
-  console.log("image loaded");
-  animate();
-};
 
-function toggleMenu() {
-  const menu = document.querySelector(".menu");
-  if (menu.style.display === "none") {
-    menu.style.display = "block"; // Show the menu
-  } else {
-    menu.style.display = "none"; // Hide the menu if already visible
-  }
-}
-
-function resetNPCPositions() {
-    // Reset Professor's position
-    professor.position.x = canvas.width / 2 - 88;
-    professor.position.y = canvas.height / 2 - 2350;
-  
-    // Reset Leader's position
-    leader.position.x = canvas.width / 2 + 4265;
-    leader.position.y = canvas.height / 2 - 2700;
-  
-    // Reset Bridgeman's position
-    bridgeman.position.x = canvas.width / 2 + 1520;
-    bridgeman.position.y = canvas.height / 2 - 610;
-    bridgeman.srcX = bridgeman.width * 2;
-    bridgeman.srcY = 0;
-  
-    // Reset Boat Captain's position
-    boatCaptain.position.x = canvas.width / 2 - 470;
-    boatCaptain.position.y = canvas.height / 2 - 361;
-  
-    // Reset Trainer1's position
-    trainer1.position.x = canvas.width / 2 + 4710;
-    trainer1.position.y = canvas.height / 2 - 612;
-  
-    // Reset Trainer2's position
-    trainer2.position.x = canvas.width / 2 + 2670;
-    trainer2.position.y = canvas.height / 2 - 2406;
-  
-    // Reset Trainer3's position
-    trainer3.position.x = canvas.width / 2 + 4584;
-    trainer3.position.y = canvas.height / 2 + 348;
-  }
-
-  
-
-
-function resetBattleZones() {
-    const battleZonesMap = [];
-    for (let i = 0; i < battleZonesData.length; i += 100) {
-      battleZonesMap.push(battleZonesData.slice(i, 100 + i));
-    }
-  
-    let index = 0;
-    battleZonesMap.forEach((row, i) => {
-      row.forEach((symbol, j) => {
-        if (symbol === 21856 && index < battleZones.length) {
-          battleZones[index].position.x = j * Boundary.width + offset.x;
-          battleZones[index].position.y = i * Boundary.height + offset.y;
-          index++;
-        }
-      });
-    });
-  }
-
-  function resetBoundaries() {
-    const collisionsMap = [];
-    for (let i = 0; i < collisions.length; i += 100) {
-      collisionsMap.push(collisions.slice(i, 100 + i));
-    }
-  
-    let index = 0;
-    collisionsMap.forEach((row, i) => {
-      row.forEach((symbol, j) => {
-        if (symbol === 21856 && index < boundaries.length) {
-          boundaries[index].position.x = j * Boundary.width + offset.x;
-          boundaries[index].position.y = i * Boundary.height + offset.y;
-          index++;
-        }
-      });
-    });
-  }
-
-  // Function to show the confirmation screen
-function showConfirmationScreen() {
-    const confirmationScreen = document.getElementById('confirmationScreen');
-    confirmationScreen.style.display = 'flex'; // Show the confirmation screen
-  }
-  
-  // Event listener for 'Yes' button click
-  document.getElementById('yesButton').addEventListener('click', function () {
-    resetMMGame(); // Reset the game when 'Yes' is clicked
-    const confirmationScreen = document.getElementById('confirmationScreen');
-    confirmationScreen.style.display = 'none'; // Hide the confirmation screen
-  });
-  
-  // Event listener for 'No' button click
-  document.getElementById('noButton').addEventListener('click', function () {
-    const confirmationScreen = document.getElementById('confirmationScreen');
-    confirmationScreen.style.display = 'none';
-    toggleMenu(); // Hide the confirmation screen
-    // Add logic here to return to the menu or perform any other action
-  });
 
 // Handling clicks on menu items
 document.querySelectorAll("#menu button").forEach(function (button) {
@@ -831,35 +856,134 @@ document.querySelectorAll("#menu button").forEach(function (button) {
       const option = button.id;
       // Perform action based on the clicked option
       switch (option) {
-        case "playerInfo":
-          // Handle Player Information option
-          console.log("Player Information");
-          break;
         case "monsterStats":
-          // Handle Monster Stats option
-          console.log("Monster Stats");
+          monsterStats.style.display = "flex";
+          currentPlayerDirection = playerDirection;
           break;
         case "instructionScreen":
-          // Handle Instruction Screen option
-          console.log("Instruction Screen");
+              controlsScreen.style.display = "flex";
+              currentPlayerDirection = playerDirection;
           break;
         case "resetGame":
-            showConfirmationScreen(); // Show the confirmation screen
-          console.log("Reset Option");
+          showConfirmationScreen(); // Show the confirmation screen
+          currentPlayerDirection = playerDirection;
+          break;
+      case "closeMenu":
+          toggleMenu();
           break;
         default:
           break;
       }
-      // Hide the menu after an option is selected
-      toggleMenu();
     });
+  });
+
+
+function toggleMenu() {
+  const menu = document.querySelector(".menu");
+  if (menu.style.display === "none") {
+    menu.style.display = "block"; // Show the menu
+    disablePlayerMovement();
+  } else {
+    menu.style.display = "none"; // Hide the menu if already visible
+    enablePlayerMovement();
+  }
+}
+
+function resetNPCPositions() {
+  // Reset Professor's position
+  professor.position.x = canvas.width / 2 - 88;
+  professor.position.y = canvas.height / 2 - 2350;
+
+  // Reset Leader's position
+  leader.position.x = canvas.width / 2 + 4265;
+  leader.position.y = canvas.height / 2 - 2700;
+
+  // Reset Bridgeman's position
+  bridgeman.position.x = canvas.width / 2 + 1520;
+  bridgeman.position.y = canvas.height / 2 - 610;
+  bridgeman.srcX = bridgeman.width * 2;
+  bridgeman.srcY = 0;
+
+  // Reset Boat Captain's position
+  boatCaptain.position.x = canvas.width / 2 - 470;
+  boatCaptain.position.y = canvas.height / 2 - 361;
+
+  // Reset Trainer1's position
+  trainer1.position.x = canvas.width / 2 + 4710;
+  trainer1.position.y = canvas.height / 2 - 612;
+
+  // Reset Trainer2's position
+  trainer2.position.x = canvas.width / 2 + 2670;
+  trainer2.position.y = canvas.height / 2 - 2406;
+
+  // Reset Trainer3's position
+  trainer3.position.x = canvas.width / 2 + 4584;
+  trainer3.position.y = canvas.height / 2 + 348;
+}
+
+function resetBattleZones() {
+  const battleZonesMap = [];
+  for (let i = 0; i < battleZonesData.length; i += 100) {
+    battleZonesMap.push(battleZonesData.slice(i, 100 + i));
+  }
+
+  let index = 0;
+  battleZonesMap.forEach((row, i) => {
+    row.forEach((symbol, j) => {
+      if (symbol === 21856 && index < battleZones.length) {
+        battleZones[index].position.x = j * Boundary.width + offset.x;
+        battleZones[index].position.y = i * Boundary.height + offset.y;
+        index++;
+      }
+    });
+  });
+}
+
+function resetBoundaries() {
+  const collisionsMap = [];
+  for (let i = 0; i < collisions.length; i += 100) {
+    collisionsMap.push(collisions.slice(i, 100 + i));
+  }
+
+  let index = 0;
+  collisionsMap.forEach((row, i) => {
+    row.forEach((symbol, j) => {
+      if (symbol === 21856 && index < boundaries.length) {
+        boundaries[index].position.x = j * Boundary.width + offset.x;
+        boundaries[index].position.y = i * Boundary.height + offset.y;
+        index++;
+      }
+    });
+  });
+}
+
+// Function to show the confirmation screen
+function showConfirmationScreen() {
+  const confirmationScreen = document.getElementById("confirmationScreen");
+  confirmationScreen.style.display = "flex"; // Show the confirmation screen
+}
+
+// Event listener for 'Yes' button click
+document.getElementById("yesButton").addEventListener("click", function () {
+  resetMMGame(); // Reset the game when 'Yes' is clicked
+  toggleMenu();
+  const confirmationScreen = document.getElementById("confirmationScreen");
+  confirmationScreen.style.display = "none"; // Hide the confirmation screen
 });
+
+// Event listener for 'No' button click
+document.getElementById("noButton").addEventListener("click", function () {
+  const confirmationScreen = document.getElementById("confirmationScreen");
+  confirmationScreen.style.display = "none";
+  playerDirection = currentPlayerDirection
+  // Add logic here to return to the menu or perform any other action
+});
+
 
 //player input
 let lastKey = "";
 $(document)
   .keydown(function (event) {
-    console.log(event.key);
     switch (event.key) {
       case "ArrowUp":
         keys.arrowUp.pressed = true;
@@ -901,5 +1025,7 @@ $(document)
         keys.arrowLeft.pressed = false;
         break;
     }
-    console.log(keys);
   });
+
+
+  animate();
