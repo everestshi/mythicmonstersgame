@@ -17,6 +17,8 @@ let queue;
 function initBattle(enemyMonster, myMonster) {
   renderedSprites = [enemyMonster, myMonster];
   queue = [];
+  let isHealUsed = false; // Flag to track if the heal button has been used
+
 
   const healthPercentage = (myMonster.health / myMonster.fullHealth) * 100;
 
@@ -108,10 +110,12 @@ function initBattle(enemyMonster, myMonster) {
 
     const healButton = document.querySelector("#healOption");
     healButton.addEventListener("click", () => {
-      document.querySelector("#battleMenu").style.display = "none";
-      myMonster.heal();
-
-      queue = []; // Clear the queue after healing
+      if (!isHealUsed){
+        document.querySelector("#battleMenu").style.display = "none";
+        myMonster.heal();
+        isHealUsed = true;
+        }
+        queue = []; // Clear the queue after healing
 
       //enemy attack
       const randomAttack =
@@ -232,7 +236,7 @@ function initBattle(enemyMonster, myMonster) {
         if (enemyMonster.health <= 0) {
           queue.push(() => {
             let expGained = Math.floor(
-              (enemyMonster.level ** 2 * myMonster.level) / 7 + 1
+              (enemyMonster.level ** 2 * myMonster.level) / 3 + 1
             );
             myMonster.gainExperience(expGained);
             enemyMonster.faint();

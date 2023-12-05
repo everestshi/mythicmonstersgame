@@ -118,7 +118,7 @@ class Player extends Sprite {
   }
 
   removeFromParty(monsterName) {
-    if (this.party.length > 1) {
+    if (this.party.length > 0) {
       this.party = this.party.filter((monster) => monster.name !== monsterName);
     }
   }
@@ -156,7 +156,7 @@ class NPC extends Sprite {
     }
   }
   removeFromNpcParty(monsterName) {
-    if (this.party.length > 1) {
+    if (this.party.length > 0) {
       this.party = this.party.filter((monster) => monster.name !== monsterName);
     }
   }

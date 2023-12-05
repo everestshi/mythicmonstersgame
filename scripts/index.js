@@ -114,6 +114,22 @@ closeStats.addEventListener("click", function () {
     attacksList.innerHTML = "";
   }
   
+  function toggleMenu() {
+    const menu = document.querySelector(".menu");
+    const computedStyle = window.getComputedStyle(menu);
+
+    if (battle.initiated){
+        return;
+    }
+
+    if (menu.style.display === "none" || computedStyle.display === "none") {
+      menu.style.display = "block"; // Show the menu
+      disablePlayerMovement();
+    } else {
+      menu.style.display = "none"; // Hide the menu if already visible
+      enablePlayerMovement();
+    }
+  }
 
 let canPlayerMove = false; // Flag to control player movement
 
@@ -201,7 +217,7 @@ let professor = new NPC({
 });
 
 //Leader sprite
-const leaderMonster = new Monster({ ...monsters.Fangtomask, level: 12 });
+let leaderMonster = new Monster({ ...monsters.Fangtomask, level: 12 });
 let leader = new NPC({
   position: {
     x: canvas.width / 2 + 4265,
@@ -247,7 +263,7 @@ let boatCaptain = new NPC({
   height: npcBoatCaptainImage.height,
 });
 
-const trainer1Monster = new Monster({ ...monsters.Pompet, level: 10 });
+let trainer1Monster = new Monster({ ...monsters.Pompet, level: 10 });
 //Trainer1 sprite
 let trainer1 = new NPC({
   position: {
@@ -265,7 +281,7 @@ let trainer1 = new NPC({
 });
 trainer1.addToNpcParty(trainer1Monster);
 
-const trainer2Monster = new Monster({ ...monsters.Dampurr, level: 10 });
+let trainer2Monster = new Monster({ ...monsters.Dampurr, level: 10 });
 //Trainer2 sprite
 let trainer2 = new NPC({
   position: {
@@ -283,7 +299,7 @@ let trainer2 = new NPC({
 });
 trainer2.addToNpcParty(trainer2Monster);
 
-const trainer3Monster = new Monster({ ...monsters.Bonfur, level: 10 });
+let trainer3Monster = new Monster({ ...monsters.Bonfur, level: 10 });
 //Trainer3 sprite
 let trainer3 = new NPC({
   position: {
@@ -847,8 +863,7 @@ function animate() {
     updatePlayerSprite();
   }
 }
-
-
+  
 
 // Handling clicks on menu items
 document.querySelectorAll("#menu button").forEach(function (button) {
@@ -876,18 +891,6 @@ document.querySelectorAll("#menu button").forEach(function (button) {
       }
     });
   });
-
-
-function toggleMenu() {
-  const menu = document.querySelector(".menu");
-  if (menu.style.display === "none") {
-    menu.style.display = "block"; // Show the menu
-    disablePlayerMovement();
-  } else {
-    menu.style.display = "none"; // Hide the menu if already visible
-    enablePlayerMovement();
-  }
-}
 
 function resetNPCPositions() {
   // Reset Professor's position

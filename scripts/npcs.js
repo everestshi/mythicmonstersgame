@@ -299,44 +299,44 @@ function updateProfessorDialogue() {
 }
 
 function updateProfessorDialogueFinal() {
-    if (game.beatenLeader) {
-        npcDialogueTexts.professor = [
+  if (game.beatenLeader) {
+    npcDialogueTexts.professor = [
+      {
+        line: "Congratulations! I heard from the leader that you defeated him with ease. I can see that your bond with your partner has grown leaps and bounds.",
+      },
+      {
+        line: "To be honest, I have already have enough hands helping me with research on this island, so I will be having you go to the next island over!",
+      },
+      {
+        line: "I know that's a big deal, but the leader vouched for your strength, so I believe in you. What do you say?",
+      },
+      {
+        options: [
           {
-            line: "Congratulations! I heard from the leader that you defeated him with ease. I can see that your bond with your partner has grown leaps and bounds.",
-          },
-          {
-            line: "To be honest, I have already have enough hands helping me with research on this island, so I will be having you go to the next island over!",
-          },
-          {
-            line: "I know that's a big deal, but the leader vouched for your strength, so I believe in you. What do you say?",
-          },
-          {
-            options: [
+            text: "Yes",
+            nextDialogue: [
+              { line: "" },
               {
-                text: "Yes",
-                nextDialogue: [
-                  { line: "" },
-                  {
-                    line: "Great! You'll do fantastic. When you're ready, go down to the dock by your hometown, and talk to the sailor - she's an old friend of mine, and will take you to your next adventure.",
-                  },
-                  {
-                    line: "Best of luck out there!",
-                  },
-                ],
+                line: "Great! You'll do fantastic. When you're ready, go down to the dock by your hometown, and talk to the sailor - she's an old friend of mine, and will take you to your next adventure.",
               },
               {
-                text: "No",
-                nextDialogue: [
-                  { line: "" },
-                  {
-                    line: "That is alright. My offer still stands, just come talk to me if you change your mind.",
-                  },
-                ],
+                line: "Best of luck out there!",
               },
             ],
           },
-        ];
-      }
+          {
+            text: "No",
+            nextDialogue: [
+              { line: "" },
+              {
+                line: "That is alright. My offer still stands, just come talk to me if you change your mind.",
+              },
+            ],
+          },
+        ],
+      },
+    ];
+  }
 }
 
 function updateBridgemanSprite() {
@@ -461,26 +461,27 @@ function displayNPCDialogue(npcInstance) {
 
 // Function to populate attacks for the monster
 function populateMonsterAttacks(monsterInstance) {
-    const attackButtons = document.querySelectorAll("#attacks button");
-    monsterInstance.attacks.forEach((attack, index) => {
-      attackButtons[index].innerHTML = attack.name;
-    });
-  }
+  const attackButtons = document.querySelectorAll("#attacks button");
+  monsterInstance.attacks.forEach((attack, index) => {
+    attackButtons[index].innerHTML = attack.name;
+  });
+}
 
-  // Function to handle faint scenario
+// Function to handle faint scenario
 function handleSuccess() {
-    const finishedScreen = document.getElementById("finishedScreen");
-    disablePlayerMovement();
-  
-    finishedScreen.style.display = "flex";
-  
-    const restartFinishedButton = document.getElementById("restartFinishedButton");
-    restartFinishedButton.addEventListener("click", function () {
-      resetMMGame();
-      finishedScreen.style.display = "none";
-    });
-  }
+  const finishedScreen = document.getElementById("finishedScreen");
+  disablePlayerMovement();
 
+  finishedScreen.style.display = "flex";
+
+  const restartFinishedButton = document.getElementById(
+    "restartFinishedButton"
+  );
+  restartFinishedButton.addEventListener("click", function () {
+    resetMMGame();
+    finishedScreen.style.display = "none";
+  });
+}
 
 // Function to display the current dialogue line and options
 function displayCurrentDialogue() {
@@ -529,8 +530,8 @@ function displayCurrentDialogue() {
           } else if (currentNPCKey === "trainer1" && option.text === "Yes") {
             window.cancelAnimationFrame(animationId);
             battle.initiated = true;
-            trainer1.removeFromNpcParty("Pompet");
-            trainer1.addToNpcParty(trainer1Monster);
+            //trainer1.removeFromNpcParty("Pompet");
+            //trainer1.addToNpcParty(trainer1Monster);
             gsap.to("#battleTransition", {
               opacity: 1,
               repeat: 3,
@@ -555,8 +556,8 @@ function displayCurrentDialogue() {
           } else if (currentNPCKey === "trainer2" && option.text === "Yes") {
             window.cancelAnimationFrame(animationId);
             battle.initiated = true;
-            trainer2.removeFromNpcParty("Dampurr");
-            trainer2.addToNpcParty(trainer2Monster);
+            //trainer2.removeFromNpcParty("Dampurr");
+            //trainer2.addToNpcParty(trainer2Monster);
             gsap.to("#battleTransition", {
               opacity: 1,
               repeat: 3,
@@ -581,8 +582,8 @@ function displayCurrentDialogue() {
           } else if (currentNPCKey === "trainer3" && option.text === "Yes") {
             window.cancelAnimationFrame(animationId);
             battle.initiated = true;
-            trainer3.removeFromNpcParty("Bonfur");
-            trainer3.addToNpcParty(trainer3Monster);
+            //trainer3.removeFromNpcParty("Bonfur");
+            //trainer3.addToNpcParty(trainer3Monster);
             gsap.to("#battleTransition", {
               opacity: 1,
               repeat: 3,
@@ -610,8 +611,6 @@ function displayCurrentDialogue() {
           ) {
             window.cancelAnimationFrame(animationId);
             battle.initiated = true;
-            leader.removeFromNpcParty("Fangtomask");
-            leader.addToNpcParty(leaderMonster);
             gsap.to("#battleTransition", {
               opacity: 1,
               repeat: 3,
@@ -633,10 +632,7 @@ function displayCurrentDialogue() {
                 });
               },
             });
-          } else if (
-            currentNPCKey === "boatCaptain" &&
-            option.text === "Yes"
-          ) {
+          } else if (currentNPCKey === "boatCaptain" && option.text === "Yes") {
             handleSuccess();
           }
 
@@ -935,9 +931,29 @@ function resetMMGame() {
   resetBoundaries();
   resetNPCPositions();
   resetNPCDialogues();
+  trainer1.isDefeated = false;
+  trainer1.removeFromNpcParty("Pompet");
+  trainer1Monster = new Monster({ ...monsters.Pompet, level: 10 });
+  trainer1.addToNpcParty(trainer1Monster);
+
+  trainer2.isDefeated = false;
+  trainer2.removeFromNpcParty("Dampurr");
+  trainer2Monster = new Monster({ ...monsters.Dampurr, level: 10 });
+  trainer2.addToNpcParty(trainer2Monster);
+
+  trainer3.isDefeated = false;
+  trainer3.removeFromNpcParty("Bonfur");
+  trainer3Monster = new Monster({ ...monsters.Bonfur, level: 10 });
+  trainer3.addToNpcParty(trainer3Monster);
+
   game.obtainedMonster = false;
   game.acceptedChallenge = false;
+
   game.beatenLeader = false;
+  leader.removeFromNpcParty("Fangtomask");
+  leaderMonster = new Monster({ ...monsters.Fangtomask, level: 12 });
+  leader.addToNpcParty(leaderMonster);
+
   game.endGame = false;
   player.party = [];
   const openingScreen = document.getElementById("openingScreen");
