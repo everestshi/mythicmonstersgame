@@ -14,11 +14,11 @@ let renderedSprites;
 let battleAnimationId;
 let queue;
 
+// main battle function ----------------------------------------------------------
 function initBattle(enemyMonster, myMonster) {
   renderedSprites = [enemyMonster, myMonster];
   queue = [];
   let isHealUsed = false; // Flag to track if the heal button has been used
-
 
   const healthPercentage = (myMonster.health / myMonster.fullHealth) * 100;
 
@@ -36,6 +36,7 @@ function initBattle(enemyMonster, myMonster) {
     "/" + myMonster.fullHealth;
   document.querySelector("#attacks").replaceChildren();
 
+  //refresh all event listeners
   function clearEventListeners() {
     queue = [];
     document.querySelector("#battleDialogue").style.display = "none";
@@ -49,13 +50,13 @@ function initBattle(enemyMonster, myMonster) {
       button.classList.add("attackButton"); // Add the class
       document.querySelector("#attacks").append(button);
     });
-  }
+  };
 
   //display main battle menu
   function displayBattleMenu() {
     clearEventListeners();
     document.querySelector("#battleMenu").style.display = "flex";
-  }
+  };
 
   //end the battle transition to map
   function endBattleTransition() {
@@ -94,7 +95,7 @@ function initBattle(enemyMonster, myMonster) {
         battle.initiated = false;
       },
     });
-  }
+  };
 
   //show battle menu buttons
   function showBattleMenu() {
@@ -108,14 +109,15 @@ function initBattle(enemyMonster, myMonster) {
       attachAttackListeners();
     });
 
+    // method for healing button
     const healButton = document.querySelector("#healOption");
     healButton.addEventListener("click", () => {
-      if (!isHealUsed){
+      if (!isHealUsed) {
         document.querySelector("#battleMenu").style.display = "none";
         myMonster.heal();
         isHealUsed = true;
-        }
-        queue = []; // Clear the queue after healing
+      }
+      queue = []; // Clear the queue after healing
 
       //enemy attack
       const randomAttack =
@@ -144,14 +146,15 @@ function initBattle(enemyMonster, myMonster) {
         });
       });
     });
-  }
+  };
 
+  // show the monster stats
   const battleMenuStats = document.getElementById("statsOption");
   battleMenuStats.addEventListener("click", function () {
     monsterStats.style.display = "flex";
   });
 
-
+  // run away function
   const runButton = document.querySelector("#runOption");
   clearEventListeners();
   runButton.addEventListener("click", () => {
@@ -179,7 +182,7 @@ function initBattle(enemyMonster, myMonster) {
         document.querySelector("#battleDialogue").style.display = "block";
         document.querySelector("#battleDialogue").innerHTML =
           "Unable to run away!";
-        queue = []; 
+        queue = [];
 
         //enemy attack
         const randomAttack =
@@ -201,16 +204,17 @@ function initBattle(enemyMonster, myMonster) {
               queue = [];
               endBattleTransition();
             });
-          }
+          };
           queue.push(() => {
             clearEventListeners();
             displayBattleMenu();
           });
         });
-      }
-    }
+      };
+    };
   });
 
+  // attach attack listeners for player monster
   function attachAttackListeners() {
     const attackButtons = document.querySelectorAll(".attackButton");
     attackButtons.forEach((button) => {
@@ -245,7 +249,7 @@ function initBattle(enemyMonster, myMonster) {
             queue = [];
             endBattleTransition();
           });
-        }
+        };
 
         //enemy attack
         const randomAttack =
@@ -274,10 +278,11 @@ function initBattle(enemyMonster, myMonster) {
         });
       });
     });
-  }
+  };
   showBattleMenu();
-}
+};
 
+//battle animation code
 function animateBattle() {
   populateCurrentMonsterDetails();
   battleAnimationId = window.requestAnimationFrame(animateBattle);
@@ -285,8 +290,9 @@ function animateBattle() {
   renderedSprites.forEach((sprite) => {
     sprite.draw();
   });
-}
+};
 
+//battle dialogue code
 document.querySelector("#battleDialogue").addEventListener("click", (e) => {
   if (queue.length > 0) {
     queue[0]();
@@ -298,6 +304,7 @@ document.querySelector("#battleDialogue").addEventListener("click", (e) => {
 
 // Function to handle faint scenario
 function handleFaint() {
+  game.started = false;
   const gameOverScreen = document.getElementById("gameOverScreen");
   disablePlayerMovement();
 
@@ -308,4 +315,4 @@ function handleFaint() {
     resetMMGame();
     gameOverScreen.style.display = "none";
   });
-}
+};

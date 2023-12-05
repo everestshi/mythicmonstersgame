@@ -1,3 +1,4 @@
+// Monster instantiation
 const luminiImageBack = new Image();
 luminiImageBack.src =
   "../images/Monsters/Magiscarf/Battlers Normal/Back/Lumini.png";
@@ -37,38 +38,43 @@ const fangtomaskImageFront = new Image();
 fangtomaskImageFront.src =
   "../images/Monsters/Magiscarf/Battlers Normal/Front/Fangtomask.png";
 
-
-
-
 //Wild Monsters
 const upsparkImageFront = new Image();
-upsparkImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Upspark.png";
+upsparkImageFront.src =
+  "../images/Monsters/Magiscarf/Battlers Normal/Front/Upspark.png";
 
 const blonkImageFront = new Image();
-blonkImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Blonk.png";
+blonkImageFront.src =
+  "../images/Monsters/Magiscarf/Battlers Normal/Front/Blonk.png";
 
 const rootsyImageFront = new Image();
-rootsyImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Rootsy.png";
+rootsyImageFront.src =
+  "../images/Monsters/Magiscarf/Battlers Normal/Front/Rootsy.png";
 
 const chickiteImageFront = new Image();
-chickiteImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Chickite.png";
+chickiteImageFront.src =
+  "../images/Monsters/Magiscarf/Battlers Normal/Front/Chickite.png";
 
 const fryrryImageFront = new Image();
-fryrryImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Fryrry.png";
+fryrryImageFront.src =
+  "../images/Monsters/Magiscarf/Battlers Normal/Front/Fryrry.png";
 
 const chartailImageFront = new Image();
-chartailImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Chartail.png";
+chartailImageFront.src =
+  "../images/Monsters/Magiscarf/Battlers Normal/Front/Chartail.png";
 
 const flooieImageFront = new Image();
-flooieImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Flooie.png";
+flooieImageFront.src =
+  "../images/Monsters/Magiscarf/Battlers Normal/Front/Flooie.png";
 
 const burrubImageFront = new Image();
-burrubImageFront.src = "../images/Monsters/Magiscarf/Battlers Normal/Front/Burrub.png";
+burrubImageFront.src =
+  "../images/Monsters/Magiscarf/Battlers Normal/Front/Burrub.png";
 
 // Define types and their advantages and disadvantages
 const typeMatchups = {
   Normal: {
-    superEffective: ["Dark"],
+    superEffective: [],
     weakAgainst: ["Rock"],
   },
   Fire: {
@@ -110,7 +116,7 @@ const typeMatchups = {
       "Flying",
       "Light",
     ],
-    weakAgainst: ["Light",],
+    weakAgainst: ["Light"],
   },
   Dark: {
     superEffective: [
@@ -125,8 +131,7 @@ const typeMatchups = {
       "Electric",
       "Flying",
     ],
-    weakAgainst: [
-    ],
+    weakAgainst: [],
   },
 };
 
@@ -157,10 +162,12 @@ function checkTypeMatchup(attackType, targetTypes) {
   return result;
 }
 
+// random level generator
 function getRandomLevel() {
   return Math.floor(Math.random() * (7 - 3 + 1)) + 3;
 }
 
+// monsters --------------------------------
 const monsters = {
   Lumini: {
     image: {
@@ -197,7 +204,12 @@ const monsters = {
     name: "Skelleks",
     type: "Dark",
     level: getRandomLevel(),
-    attacks: [attacks.Tackle, attacks.Headbutt, attacks.ShadowStrike, attacks.DescendingDark],
+    attacks: [
+      attacks.Tackle,
+      attacks.Headbutt,
+      attacks.ShadowStrike,
+      attacks.DescendingDark,
+    ],
     baseHealth: 50,
     baseAttack: 60,
     baseDefense: 90,
@@ -216,7 +228,12 @@ const monsters = {
     name: "Dampurr",
     type: "Water",
     level: getRandomLevel(),
-    attacks: [attacks.Scratch, attacks.Headbutt, attacks.Aquamist, attacks.RipeTideBlast],
+    attacks: [
+      attacks.Scratch,
+      attacks.Headbutt,
+      attacks.Aquamist,
+      attacks.RipeTideBlast,
+    ],
     baseHealth: 40,
     baseAttack: 60,
     baseDefense: 50,
@@ -235,7 +252,12 @@ const monsters = {
     name: "Pompet",
     type: "Grass",
     level: getRandomLevel(),
-    attacks: [attacks.Tackle, attacks.Headbutt, attacks.LeafWhirl, attacks.BranchWhip],
+    attacks: [
+      attacks.Tackle,
+      attacks.Headbutt,
+      attacks.LeafWhirl,
+      attacks.BranchWhip,
+    ],
     baseHealth: 70,
     baseAttack: 50,
     baseDefense: 75,
@@ -254,7 +276,12 @@ const monsters = {
     name: "Bonfur",
     type: "Fire",
     level: getRandomLevel(),
-    attacks: [attacks.Scratch, attacks.Headbutt, attacks.PyroBall, attacks.EmberBurst],
+    attacks: [
+      attacks.Scratch,
+      attacks.Headbutt,
+      attacks.PyroBall,
+      attacks.EmberBurst,
+    ],
     baseHealth: 50,
     baseAttack: 75,
     baseDefense: 40,
@@ -271,7 +298,12 @@ const monsters = {
     name: "Fangtomask",
     type: "Dark",
     level: getRandomLevel(),
-    attacks: [attacks.Scratch, attacks.Headbutt, attacks.ShadowStrike, attacks.ShadeClaw],
+    attacks: [
+      attacks.Scratch,
+      attacks.Headbutt,
+      attacks.ShadowStrike,
+      attacks.ShadeClaw,
+    ],
     baseHealth: 80,
     baseAttack: 80,
     baseDefense: 80,
@@ -279,6 +311,7 @@ const monsters = {
   },
 };
 
+// wild monsters ---------------------------------------------
 const wildMonsters = {
   Upspark: {
     image: {

@@ -205,6 +205,23 @@ button:hover {
   margin-bottom: 5px;
 }
 
+#healStatScreen {
+  margin-top: 20px;
+  padding: 8px 16px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#healStatScreen:hover {
+  background-color: #45a049;
+}
+
 #closeStats {
   margin-top: 20px;
   padding: 8px 16px;

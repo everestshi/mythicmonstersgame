@@ -1,9 +1,9 @@
 "use strict";
 
-//New game
+// Initiated new game ----------------------------------------------
 const game = new Game();
 
-// Load NPC images
+// Load NPC images -------------------------------------------------
 const npcProfessorImage = new Image();
 npcProfessorImage.src = "/images/NPCs/MM-Professor-Front.png";
 
@@ -19,10 +19,11 @@ npcTrainerImage.src = "/images/NPCs/MM-trainee.png";
 const npcBoatCaptainImage = new Image();
 npcBoatCaptainImage.src = "/images/NPCs/MM-boatcaptain.png";
 
-// Load Player Image
+// Load Player Image -----------------------------------------------
 const playerImage = new Image();
 playerImage.src = "../images/MM-Protagonist.png";
 
+ // Other instantiations ------------------------------------------
 const keys = {
   arrowUp: {
     pressed: false,
@@ -37,14 +38,17 @@ const keys = {
     pressed: false,
   },
 };
-
 let animationId;
 
+//battle object 
+const battle = {
+    initiated: false,
+  };
 
+// Code for controls/instructions screen -----------------------------
 const controlsButton = document.getElementById("controlButton");
 const controlsScreen = document.getElementById("controlsScreen");
 const closeControls = document.getElementById("closeControls");
-
 
 controlsButton.addEventListener("click", function () {
   controlsScreen.style.display = "flex";
@@ -55,7 +59,16 @@ closeControls.addEventListener("click", function () {
   playerDirection = currentPlayerDirection;
 });
 
+
+// Code for monster stats screen ------------------------------------
 const monsterStats = document.getElementById("monster-stats");
+const healStatScreen = document.getElementById("healStatScreen");
+healStatScreen.addEventListener("click", function() {
+    if (!battle.initiated && player.party.length > 0){
+        player.party[0].health = player.party[0].fullHealth;
+        populateCurrentMonsterDetails();
+    }
+})
 const closeStats = document.getElementById("closeStats");
 closeStats.addEventListener("click", function () {
     monsterStats.style.display = "none";
@@ -63,7 +76,7 @@ closeStats.addEventListener("click", function () {
         playerDirection = currentPlayerDirection;
     }
 });
-
+// Functions to populate and reset the current monster details
   function populateCurrentMonsterDetails() {
     const currentMonsterData = monsters[player.party[0].name]; // Retrieve the monster data by name
     document.getElementById("monsterOwner").textContent =
@@ -114,11 +127,13 @@ closeStats.addEventListener("click", function () {
     attacksList.innerHTML = "";
   }
   
+// Menu toggling function ------------------------------------------------
+
   function toggleMenu() {
     const menu = document.querySelector(".menu");
     const computedStyle = window.getComputedStyle(menu);
 
-    if (battle.initiated){
+    if (battle.initiated || !game.started){
         return;
     }
 
@@ -131,9 +146,8 @@ closeStats.addEventListener("click", function () {
     }
   }
 
-let canPlayerMove = false; // Flag to control player movement
-
-// Function to handle player movement
+// Player movement functions ------------------------------
+let canPlayerMove = false;
 function handlePlayerMovement() {
   if (!canPlayerMove) {
     keys.arrowUp.pressed = false;
@@ -153,7 +167,7 @@ function enablePlayerMovement() {
   canPlayerMove = true;
 }
 
-//player sprite
+//player sprite instantiation ------------------------------
 const player = new Player({
   position: {
     x: canvas.width / 2 - 24,
@@ -167,11 +181,10 @@ const player = new Player({
   width: playerImage.width / 56,
   height: playerImage.height / 20,
 });
-
 let playerDirection = "down"; // Set the default direction
 let currentPlayerDirection = "";
 
-
+// Opening Screen code ---------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
   const openingScreen = document.getElementById("openingScreen");
   const gameScreen = document.getElementById("gameScreen");
@@ -194,6 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
       enablePlayerMovement();
       resetCurrentMonsterDetails();
       playerDirection = "down";
+      game.started = true;
     } else {
       alert("Please enter a valid name!");
     }
@@ -201,6 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+// Instantiating other NPCs -----------------------------------------------
 //Professor sprite
 let professor = new NPC({
   position: {
@@ -317,7 +332,8 @@ let trainer3 = new NPC({
 });
 trainer3.addToNpcParty(trainer3Monster);
 
-//create collisions map for boundaries -------------
+
+//create collisions map for boundaries -------------------------------
 const collisionsMap = [];
 for (let i = 0; i < collisions.length; i += 100) {
   collisionsMap.push(collisions.slice(i, 100 + i));
@@ -339,7 +355,7 @@ collisionsMap.forEach((row, i) => {
   });
 });
 
-//create battlezones map -----------------------------
+//create battlezones map -----------------------------------------------
 const battleZonesMap = [];
 for (let i = 0; i < battleZonesData.length; i += 100) {
   battleZonesMap.push(battleZonesData.slice(i, 100 + i));
@@ -380,7 +396,7 @@ const foreground = new Sprite({
   image: foregroundImage,
 });
 
-//collision function
+//collision function-----------------------------------------------------------------------
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
     rectangle1.position.x + rectangle1.width - 8 >= rectangle2.position.x &&
@@ -390,7 +406,7 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 
-// Define sprite frames for player directions
+// Define sprite frames for player directions, as well as player movement code ---------------------------------------
 const playerFrames = {
   up: [
     {
@@ -529,13 +545,6 @@ function updatePlayerSprite() {
   player.srcHeight = frame.srcHeight;
 }
 
-function getEnemyMonster() {
-  const monsterKeys = Object.keys(wildMonsters);
-  const enemyMonsterKey =
-    monsterKeys[Math.floor(Math.random() * monsterKeys.length)];
-  return new Monster(wildMonsters[enemyMonsterKey]);
-}
-
 const movables = [
   background,
   foreground,
@@ -550,12 +559,15 @@ const movables = [
   boatCaptain,
 ];
 
-//battle object
-const battle = {
-  initiated: false,
-};
+// function for getting a random enemy monster ------------------------
+function getEnemyMonster() {
+    const monsterKeys = Object.keys(wildMonsters);
+    const enemyMonsterKey =
+      monsterKeys[Math.floor(Math.random() * monsterKeys.length)];
+    return new Monster(wildMonsters[enemyMonsterKey]);
+  }
 
-//animation loop
+//main animation loop ----------------------------------------------------------
 function animate() {
   animationId = window.requestAnimationFrame(animate);
   //draw sprites
@@ -865,7 +877,7 @@ function animate() {
 }
   
 
-// Handling clicks on menu items
+// Handling clicks on menu items -----------------------------------------------------
 document.querySelectorAll("#menu button").forEach(function (button) {
     button.addEventListener("click", function () {
       const option = button.id;
@@ -892,6 +904,8 @@ document.querySelectorAll("#menu button").forEach(function (button) {
     });
   });
 
+
+  // aid functions for resetting  ---------------------------------------
 function resetNPCPositions() {
   // Reset Professor's position
   professor.position.x = canvas.width / 2 - 88;
@@ -960,7 +974,7 @@ function resetBoundaries() {
   });
 }
 
-// Function to show the confirmation screen
+// Function to show the confirmation screen-------------------------------------------
 function showConfirmationScreen() {
   const confirmationScreen = document.getElementById("confirmationScreen");
   confirmationScreen.style.display = "flex"; // Show the confirmation screen
@@ -983,7 +997,7 @@ document.getElementById("noButton").addEventListener("click", function () {
 });
 
 
-//player input
+//player input --------------------------------------------------------------------
 let lastKey = "";
 $(document)
   .keydown(function (event) {

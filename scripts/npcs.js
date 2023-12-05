@@ -17,8 +17,9 @@ function hideNPCDialogue() {
   const dialogueElement = document.querySelector("#npcDialogue");
   dialogueElement.style.display = "none";
   interactingNPC = null; // Reset the interacting NPC
-}
+};
 
+// NPC Dialogue
 const npcDialogueTexts = {
   professor: [
     {
@@ -339,6 +340,7 @@ function updateProfessorDialogueFinal() {
   }
 }
 
+// Update sprite positions and dialogue ---------------------------------------------
 function updateBridgemanSprite() {
   if (game.obtainedMonster) {
     bridgeman.srcX = npcBridgemanImage.width / 4; // Setting the sprite to the last one
@@ -438,7 +440,7 @@ function updateLeaderDialogue() {
       },
     ];
   }
-}
+};
 
 let currentDialogue = null;
 let currentLineIndex = 0;
@@ -457,19 +459,20 @@ function displayNPCDialogue(npcInstance) {
     currentDialogue = npcDialogueTexts[currentNPCKey];
     displayCurrentDialogue();
   }
-}
+};
 
-// Function to populate attacks for the monster
+// Function to populate attacks for the monster ---------------------
 function populateMonsterAttacks(monsterInstance) {
   const attackButtons = document.querySelectorAll("#attacks button");
   monsterInstance.attacks.forEach((attack, index) => {
     attackButtons[index].innerHTML = attack.name;
   });
-}
+};
 
-// Function to handle faint scenario
+// Function to handle game finished scenario -----------------------------
 function handleSuccess() {
   const finishedScreen = document.getElementById("finishedScreen");
+  game.started = false;
   disablePlayerMovement();
 
   finishedScreen.style.display = "flex";
@@ -481,9 +484,9 @@ function handleSuccess() {
     resetMMGame();
     finishedScreen.style.display = "none";
   });
-}
+};
 
-// Function to display the current dialogue line and options
+// Function to display the current dialogue line and options, as well as specific NPC situations --------------
 function displayCurrentDialogue() {
   const dialogueElement = document.querySelector("#npcDialogueLine");
   const optionsElement = document.querySelector("#npcOptions");
@@ -646,15 +649,17 @@ function displayCurrentDialogue() {
       dialogueElement.innerText = currentLine.line;
       optionsElement.innerHTML = ""; // Clear options when not present
     }
-  }
-}
+  };
+};
+
+// More NPC Dialogue functions ------------------------------------------------
 
 function hideNPCDialogue() {
   const dialogueElement = document.querySelector("#npcDialogue");
   dialogueElement.style.display = "none";
   currentDialogue = null;
   currentLineIndex = 0;
-}
+};
 
 document.querySelector("#npcDialogue").addEventListener("click", () => {
   if (currentDialogue && currentDialogue[currentLineIndex + 1]) {
@@ -919,8 +924,9 @@ function resetNPCDialogues() {
         ],
       },
     ]);
-}
+};
 
+// reset entire game ------------------------------------------------
 function resetMMGame() {
   playerDirection = "down";
   background.position.x = offset.x;
@@ -954,8 +960,9 @@ function resetMMGame() {
   leaderMonster = new Monster({ ...monsters.Fangtomask, level: 12 });
   leader.addToNpcParty(leaderMonster);
 
+  game.started = false;
   game.endGame = false;
   player.party = [];
   const openingScreen = document.getElementById("openingScreen");
   openingScreen.style.display = "flex";
-}
+};
