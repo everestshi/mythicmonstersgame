@@ -50,13 +50,13 @@ function initBattle(enemyMonster, myMonster) {
       button.classList.add("attackButton"); // Add the class
       document.querySelector("#attacks").append(button);
     });
-  };
+  }
 
   //display main battle menu
   function displayBattleMenu() {
     clearEventListeners();
     document.querySelector("#battleMenu").style.display = "flex";
-  };
+  }
 
   //end the battle transition to map
   function endBattleTransition() {
@@ -95,7 +95,7 @@ function initBattle(enemyMonster, myMonster) {
         battle.initiated = false;
       },
     });
-  };
+  }
 
   //show battle menu buttons
   function showBattleMenu() {
@@ -146,7 +146,7 @@ function initBattle(enemyMonster, myMonster) {
         });
       });
     });
-  };
+  }
 
   // show the monster stats
   const battleMenuStats = document.getElementById("statsOption");
@@ -204,14 +204,14 @@ function initBattle(enemyMonster, myMonster) {
               queue = [];
               endBattleTransition();
             });
-          };
+          }
           queue.push(() => {
             clearEventListeners();
             displayBattleMenu();
           });
         });
-      };
-    };
+      }
+    }
   });
 
   // attach attack listeners for player monster
@@ -230,34 +230,61 @@ function initBattle(enemyMonster, myMonster) {
 
       button.addEventListener("click", (e) => {
         const selectedAttack = attacks[e.currentTarget.innerHTML];
-        //my attack
-        myMonster.attackMethod({
-          attack: selectedAttack,
-          recipient: enemyMonster,
-        });
 
-        //monster dies
-        if (enemyMonster.health <= 0) {
-          queue.push(() => {
-            let expGained = Math.floor(
-              (enemyMonster.level ** 2 * myMonster.level) / 3 + 1
-            );
-            myMonster.gainExperience(expGained);
-            enemyMonster.faint();
+        if (myMonster.speed >= enemyMonster.speed) {
+          //my attack
+          myMonster.attackMethod({
+            attack: selectedAttack,
+            recipient: enemyMonster,
           });
+
+          //monster dies
+          if (enemyMonster.health <= 0) {
+            queue.push(() => {
+              let expGained = Math.floor(
+                (enemyMonster.level ** 2 * myMonster.level) / 3 + 1
+              );
+              myMonster.gainExperience(expGained);
+              enemyMonster.faint();
+            });
+            queue.push(() => {
+              queue = [];
+              endBattleTransition();
+            });
+          }
+
+          //enemy attack
+          const randomAttack =
+            enemyMonster.attacks[
+              Math.floor(Math.random() * enemyMonster.attacks.length)
+            ];
+
           queue.push(() => {
-            queue = [];
-            endBattleTransition();
+            enemyMonster.attackMethod({
+              attack: randomAttack,
+              recipient: myMonster,
+            });
+
+            if (myMonster.health <= 0) {
+              queue.push(() => {
+                myMonster.faint();
+              });
+              queue.push(() => {
+                queue = [];
+                endBattleTransition();
+              });
+            }
+            queue.push(() => {
+              showBattleMenu();
+            });
           });
-        };
+        } else {
+          //enemy attacks first
+          const randomAttack =
+            enemyMonster.attacks[
+              Math.floor(Math.random() * enemyMonster.attacks.length)
+            ];
 
-        //enemy attack
-        const randomAttack =
-          enemyMonster.attacks[
-            Math.floor(Math.random() * enemyMonster.attacks.length)
-          ];
-
-        queue.push(() => {
           enemyMonster.attackMethod({
             attack: randomAttack,
             recipient: myMonster,
@@ -272,15 +299,37 @@ function initBattle(enemyMonster, myMonster) {
               endBattleTransition();
             });
           }
+
           queue.push(() => {
-            showBattleMenu();
+            myMonster.attackMethod({
+              attack: selectedAttack,
+              recipient: enemyMonster,
+            });
+
+            //monster dies
+            if (enemyMonster.health <= 0) {
+              queue.push(() => {
+                let expGained = Math.floor(
+                  (enemyMonster.level ** 2 * myMonster.level) / 3 + 1
+                );
+                myMonster.gainExperience(expGained);
+                enemyMonster.faint();
+              });
+              queue.push(() => {
+                queue = [];
+                endBattleTransition();
+              });
+            }
+            queue.push(() => {
+              showBattleMenu();
+            });
           });
-        });
+        }
       });
     });
-  };
+  }
   showBattleMenu();
-};
+}
 
 //battle animation code
 function animateBattle() {
@@ -290,7 +339,7 @@ function animateBattle() {
   renderedSprites.forEach((sprite) => {
     sprite.draw();
   });
-};
+}
 
 //battle dialogue code
 document.querySelector("#battleDialogue").addEventListener("click", (e) => {
@@ -315,4 +364,4 @@ function handleFaint() {
     resetMMGame();
     gameOverScreen.style.display = "none";
   });
-};
+}

@@ -23,7 +23,7 @@ npcBoatCaptainImage.src = "/images/NPCs/MM-boatcaptain.png";
 const playerImage = new Image();
 playerImage.src = "../images/MM-Protagonist.png";
 
- // Other instantiations ------------------------------------------
+// Other instantiations ------------------------------------------
 const keys = {
   arrowUp: {
     pressed: false,
@@ -40,10 +40,10 @@ const keys = {
 };
 let animationId;
 
-//battle object 
+//battle object
 const battle = {
-    initiated: false,
-  };
+  initiated: false,
+};
 
 // Code for controls/instructions screen -----------------------------
 const controlsButton = document.getElementById("controlButton");
@@ -59,92 +59,89 @@ closeControls.addEventListener("click", function () {
   playerDirection = currentPlayerDirection;
 });
 
-
 // Code for monster stats screen ------------------------------------
 const monsterStats = document.getElementById("monster-stats");
 const healStatScreen = document.getElementById("healStatScreen");
-healStatScreen.addEventListener("click", function() {
-    if (!battle.initiated && player.party.length > 0){
-        player.party[0].health = player.party[0].fullHealth;
-        populateCurrentMonsterDetails();
-    }
-})
+healStatScreen.addEventListener("click", function () {
+  if (!battle.initiated && player.party.length > 0) {
+    player.party[0].health = player.party[0].fullHealth;
+    populateCurrentMonsterDetails();
+  }
+});
 const closeStats = document.getElementById("closeStats");
 closeStats.addEventListener("click", function () {
-    monsterStats.style.display = "none";
-    if (!battle.initiated){
-        playerDirection = currentPlayerDirection;
-    }
+  monsterStats.style.display = "none";
+  if (!battle.initiated) {
+    playerDirection = currentPlayerDirection;
+  }
 });
 // Functions to populate and reset the current monster details
-  function populateCurrentMonsterDetails() {
-    const currentMonsterData = monsters[player.party[0].name]; // Retrieve the monster data by name
-    document.getElementById("monsterOwner").textContent =
-      "Monster Owner: " + player.name; // Example owner name
-    document.getElementById("monsterFrontImage").src =
+function populateCurrentMonsterDetails() {
+  const currentMonsterData = monsters[player.party[0].name]; // Retrieve the monster data by name
+  document.getElementById("monsterOwner").textContent =
+    "Monster Owner: " + player.name; // Example owner name
+  document.getElementById("monsterFrontImage").src =
     currentMonsterData.image.source;
-    document.getElementById("monsterName").textContent =
-    currentMonsterData.name;
-    document.getElementById("monsterLevel").textContent =
-      "Level: " + player.party[0].level;
-    document.getElementById("monsterType").textContent =
-      "Type: " + currentMonsterData.type;
-    document.getElementById("expToNextLevel").textContent =
+  document.getElementById("monsterName").textContent = currentMonsterData.name;
+  document.getElementById("monsterLevel").textContent =
+    "Level: " + player.party[0].level;
+  document.getElementById("monsterType").textContent =
+    "Type: " + currentMonsterData.type;
+  document.getElementById("expToNextLevel").textContent =
     player.party[0].currentExperience +
-      "/" +
-      player.party[0].experienceToNextLevel; // Example experience needed to next level
-    document.getElementById("monsterHealth").textContent =
+    "/" +
+    player.party[0].experienceToNextLevel; // Example experience needed to next level
+  document.getElementById("monsterHealth").textContent =
     player.party[0].health + "/" + player.party[0].fullHealth;
-    document.getElementById("monsterAttack").textContent =
-    player.party[0].attack;
-    document.getElementById("monsterDefense").textContent =
+  document.getElementById("monsterAttack").textContent = player.party[0].attack;
+  document.getElementById("monsterDefense").textContent =
     player.party[0].defense;
-    document.getElementById("monsterSpeed").textContent =
-    player.party[0].speed;
+  document.getElementById("monsterSpeed").textContent = player.party[0].speed;
 
-    const attacksList = document.getElementById("monsterAttacks");
-    attacksList.innerHTML = "";
-    currentMonsterData.attacks.forEach((attack) => {
-      const li = document.createElement("li");
-      li.textContent = attack.name;
-      attacksList.appendChild(li);
-    });
-  }
+  const attacksList = document.getElementById("monsterAttacks");
+  attacksList.innerHTML = "";
+  currentMonsterData.attacks.forEach((attack) => {
+    const li = document.createElement("li");
+    li.textContent = attack.name;
+    attacksList.appendChild(li);
+  });
+}
 
-  function resetCurrentMonsterDetails() {
-    document.getElementById("monsterOwner").textContent = "Monster Owner: " + player.name;
-    document.getElementById("monsterFrontImage").src = "";
-    document.getElementById("monsterName").textContent = "";
-    document.getElementById("monsterLevel").textContent = "Level: ";
-    document.getElementById("monsterType").textContent = "Type: ";
-    document.getElementById("expToNextLevel").textContent = "";
-    document.getElementById("monsterHealth").textContent = "";
-    document.getElementById("monsterAttack").textContent = "";
-    document.getElementById("monsterDefense").textContent = "";
-    document.getElementById("monsterSpeed").textContent = "";
-  
-    const attacksList = document.getElementById("monsterAttacks");
-    attacksList.innerHTML = "";
-  }
-  
+function resetCurrentMonsterDetails() {
+  document.getElementById("monsterOwner").textContent =
+    "Monster Owner: " + player.name;
+  document.getElementById("monsterFrontImage").src = "";
+  document.getElementById("monsterName").textContent = "";
+  document.getElementById("monsterLevel").textContent = "Level: ";
+  document.getElementById("monsterType").textContent = "Type: ";
+  document.getElementById("expToNextLevel").textContent = "";
+  document.getElementById("monsterHealth").textContent = "";
+  document.getElementById("monsterAttack").textContent = "";
+  document.getElementById("monsterDefense").textContent = "";
+  document.getElementById("monsterSpeed").textContent = "";
+
+  const attacksList = document.getElementById("monsterAttacks");
+  attacksList.innerHTML = "";
+}
+
 // Menu toggling function ------------------------------------------------
 
-  function toggleMenu() {
-    const menu = document.querySelector(".menu");
-    const computedStyle = window.getComputedStyle(menu);
+function toggleMenu() {
+  const menu = document.querySelector(".menu");
+  const computedStyle = window.getComputedStyle(menu);
 
-    if (battle.initiated || !game.started){
-        return;
-    }
-
-    if (menu.style.display === "none" || computedStyle.display === "none") {
-      menu.style.display = "block"; // Show the menu
-      disablePlayerMovement();
-    } else {
-      menu.style.display = "none"; // Hide the menu if already visible
-      enablePlayerMovement();
-    }
+  if (battle.initiated || !game.started) {
+    return;
   }
+
+  if (menu.style.display === "none" || computedStyle.display === "none") {
+    menu.style.display = "block"; // Show the menu
+    disablePlayerMovement();
+  } else {
+    menu.style.display = "none"; // Hide the menu if already visible
+    enablePlayerMovement();
+  }
+}
 
 // Player movement functions ------------------------------
 let canPlayerMove = false;
@@ -213,7 +210,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-
 
 // Instantiating other NPCs -----------------------------------------------
 //Professor sprite
@@ -331,7 +327,6 @@ let trainer3 = new NPC({
   party: [trainer3Monster],
 });
 trainer3.addToNpcParty(trainer3Monster);
-
 
 //create collisions map for boundaries -------------------------------
 const collisionsMap = [];
@@ -561,11 +556,11 @@ const movables = [
 
 // function for getting a random enemy monster ------------------------
 function getEnemyMonster() {
-    const monsterKeys = Object.keys(wildMonsters);
-    const enemyMonsterKey =
-      monsterKeys[Math.floor(Math.random() * monsterKeys.length)];
-    return new Monster(wildMonsters[enemyMonsterKey]);
-  }
+  const monsterKeys = Object.keys(wildMonsters);
+  const enemyMonsterKey =
+    monsterKeys[Math.floor(Math.random() * monsterKeys.length)];
+  return new Monster(wildMonsters[enemyMonsterKey]);
+}
 
 //main animation loop ----------------------------------------------------------
 function animate() {
@@ -875,37 +870,35 @@ function animate() {
     updatePlayerSprite();
   }
 }
-  
 
 // Handling clicks on menu items -----------------------------------------------------
 document.querySelectorAll("#menu button").forEach(function (button) {
-    button.addEventListener("click", function () {
-      const option = button.id;
-      // Perform action based on the clicked option
-      switch (option) {
-        case "monsterStats":
-          monsterStats.style.display = "flex";
-          currentPlayerDirection = playerDirection;
-          break;
-        case "instructionScreen":
-              controlsScreen.style.display = "flex";
-              currentPlayerDirection = playerDirection;
-          break;
-        case "resetGame":
-          showConfirmationScreen(); // Show the confirmation screen
-          currentPlayerDirection = playerDirection;
-          break;
+  button.addEventListener("click", function () {
+    const option = button.id;
+    // Perform action based on the clicked option
+    switch (option) {
+      case "monsterStats":
+        monsterStats.style.display = "flex";
+        currentPlayerDirection = playerDirection;
+        break;
+      case "instructionScreen":
+        controlsScreen.style.display = "flex";
+        currentPlayerDirection = playerDirection;
+        break;
+      case "resetGame":
+        showConfirmationScreen(); // Show the confirmation screen
+        currentPlayerDirection = playerDirection;
+        break;
       case "closeMenu":
-          toggleMenu();
-          break;
-        default:
-          break;
-      }
-    });
+        toggleMenu();
+        break;
+      default:
+        break;
+    }
   });
+});
 
-
-  // aid functions for resetting  ---------------------------------------
+// aid functions for resetting  ---------------------------------------
 function resetNPCPositions() {
   // Reset Professor's position
   professor.position.x = canvas.width / 2 - 88;
@@ -982,8 +975,8 @@ function showConfirmationScreen() {
 
 // Event listener for 'Yes' button click
 document.getElementById("yesButton").addEventListener("click", function () {
+    toggleMenu();
   resetMMGame(); // Reset the game when 'Yes' is clicked
-  toggleMenu();
   const confirmationScreen = document.getElementById("confirmationScreen");
   confirmationScreen.style.display = "none"; // Hide the confirmation screen
 });
@@ -992,10 +985,9 @@ document.getElementById("yesButton").addEventListener("click", function () {
 document.getElementById("noButton").addEventListener("click", function () {
   const confirmationScreen = document.getElementById("confirmationScreen");
   confirmationScreen.style.display = "none";
-  playerDirection = currentPlayerDirection
+  playerDirection = currentPlayerDirection;
   // Add logic here to return to the menu or perform any other action
 });
-
 
 //player input --------------------------------------------------------------------
 let lastKey = "";
@@ -1044,5 +1036,4 @@ $(document)
     }
   });
 
-
-  animate();
+animate();

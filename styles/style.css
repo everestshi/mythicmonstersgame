@@ -1,16 +1,18 @@
 @charset "utf-8";
 
 html {
-    box-sizing: border-box;
-  }
+  box-sizing: border-box;
+}
 
-*, *:before, *:after {
-    box-sizing: inherit;
-    font-family: 'Press Start 2P', cursive;
-  }
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  font-family: "Press Start 2P", cursive;
+}
 
 body {
-    background-color: black;
+  background-color: black;
 }
 
 button {
@@ -23,7 +25,6 @@ button {
 button:hover {
   background-color: rgb(217, 217, 217);
 }
-
 
 /* Controls Screen Styling */
 #controlsScreen {
@@ -40,7 +41,7 @@ button:hover {
 
 #controlsContent {
   text-align: center;
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
   color: #000;
 }
 
@@ -57,7 +58,7 @@ button:hover {
 #closeControls {
   margin-top: 20px;
   padding: 8px 16px;
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
   font-size: 16px;
   color: #fff;
   background-color: #ff4040;
@@ -108,7 +109,7 @@ button:hover {
 
 #startButton {
   padding: 8px 20px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   cursor: pointer;
@@ -121,7 +122,7 @@ button:hover {
 
 #controlButton {
   padding: 8px 20px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   cursor: pointer;
@@ -131,7 +132,6 @@ button:hover {
 #controlButton:hover {
   background-color: #45a049;
 }
-
 
 #monster-stats {
   width: 1024px;
@@ -200,7 +200,6 @@ button:hover {
   text-align: left;
 }
 
-
 #monster-stats .attacks p {
   margin-bottom: 5px;
 }
@@ -208,10 +207,10 @@ button:hover {
 #healStatScreen {
   margin-top: 20px;
   padding: 8px 16px;
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
   font-size: 16px;
   color: #fff;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -225,7 +224,7 @@ button:hover {
 #closeStats {
   margin-top: 20px;
   padding: 8px 16px;
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
   font-size: 16px;
   color: #fff;
   background-color: #ff4040;
@@ -271,7 +270,7 @@ button:hover {
 }
 
 #gameOverScreen h1 {
-  font-size: 24px; 
+  font-size: 24px;
   margin-bottom: 10px;
 }
 
@@ -311,7 +310,7 @@ button:hover {
 #restartFinishedButton {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #919191;
+  background-color: #4caf50;
   color: white;
   border: none;
   cursor: pointer;
@@ -320,7 +319,7 @@ button:hover {
 }
 
 #restartFinishedButton:hover {
-  background-color: #37b929;
+  background-color: #45a049;
 }
 
 .menu {
@@ -367,7 +366,7 @@ button:hover {
 }
 
 .confirmation-box {
-  background-color: rgba(255, 255, 255);;
+  background-color: rgba(255, 255, 255);
   padding: 20px;
   border-radius: 5px;
   text-align: center;
@@ -413,13 +412,11 @@ button:hover {
   grid-template-columns: repeat(2, 1fr);
 }
 
-
-
 #userInterface {
   display: none;
 }
 
-#healthBar{
+#healthBar {
   position: relative;
 }
 
@@ -513,15 +510,15 @@ button:hover {
   z-index: 2;
 }
 
-#battleQuestion{
-  flex: 1; 
-  display: flex; 
+#battleQuestion {
+  flex: 1;
+  display: flex;
   align-items: center;
   justify-content: center;
   border-right: 4px black solid;
 }
 
-#battleMenuButtons{
+#battleMenuButtons {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -556,13 +553,13 @@ h1 {
   margin: 0;
 }
 
-#attacks{
+#attacks {
   width: 66.66%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
 
-#attackType{
+#attackType {
   display: flex;
   align-items: center;
   justify-content: center;
