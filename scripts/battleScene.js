@@ -19,8 +19,9 @@ function initBattle(enemyMonster, myMonster) {
   renderedSprites = [enemyMonster, myMonster];
   queue = [];
   let isHealUsed = false; // Flag to track if the heal button has been used
+  myMonster.leveledUp = false;
 
-  const healthPercentage = (myMonster.health / myMonster.fullHealth) * 100;
+  let healthPercentage = (myMonster.health / myMonster.fullHealth) * 100;
 
   document.querySelector("#userInterface").style.display = "block";
   document.querySelector("#battleDialogue").style.display = "none";
@@ -227,7 +228,6 @@ function initBattle(enemyMonster, myMonster) {
         document.querySelector("#attackType").innerHTML =
           "Attack Type: " + selectedAttack.type;
       });
-
       button.addEventListener("click", (e) => {
         const selectedAttack = attacks[e.currentTarget.innerHTML];
 
@@ -244,8 +244,18 @@ function initBattle(enemyMonster, myMonster) {
               let expGained = Math.floor(
                 (enemyMonster.level ** 2 * myMonster.level) / 3 + 1
               );
-              myMonster.gainExperience(expGained);
               enemyMonster.faint();
+              myMonster.gainExperience(expGained);
+              if (myMonster.leveledUp) {
+                document.querySelector("#battleDialogue").innerHTML =
+                  myMonster.name + " has leveled up!";
+                document.getElementById("myLvl").innerHTML =
+                  "Lv." + myMonster.level;
+                document.querySelector("#MyTotalHealthStat").innerHTML =
+                  "/" + myMonster.fullHealth;
+                  document.querySelector("#myCurrentHealth").style.width =
+                  (myMonster.health / myMonster.fullHealth) * 100 + "%";
+              }
             });
             queue.push(() => {
               queue = [];
@@ -312,8 +322,18 @@ function initBattle(enemyMonster, myMonster) {
                 let expGained = Math.floor(
                   (enemyMonster.level ** 2 * myMonster.level) / 3 + 1
                 );
-                myMonster.gainExperience(expGained);
                 enemyMonster.faint();
+                myMonster.gainExperience(expGained);
+                if (myMonster.leveledUp) {
+                  document.querySelector("#battleDialogue").innerHTML =
+                    myMonster.name + " has leveled up!";
+                  document.getElementById("myLvl").innerHTML =
+                    "Lv." + myMonster.level;
+                  document.querySelector("#MyTotalHealthStat").innerHTML =
+                    "/" + myMonster.fullHealth;
+                    document.querySelector("#myCurrentHealth").style.width =
+                    (myMonster.health / myMonster.fullHealth) * 100 + "%";
+                }
               });
               queue.push(() => {
                 queue = [];

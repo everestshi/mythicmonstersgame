@@ -214,6 +214,7 @@ class Monster extends Sprite {
     this.isEnemy = isEnemy;
     this.name = name;
     this.attacks = attacks;
+    this.leveledUp = false;
 
     if (!isEnemy) {
       this.position = { x: 235, y: 315 };
@@ -223,6 +224,7 @@ class Monster extends Sprite {
   // Function to gain experience
   gainExperience(amount) {
     this.currentExperience += amount;
+    console.log('gained exp')
 
     // Check if enough experience is gained to level up
     if (this.currentExperience >= this.experienceToNextLevel) {
@@ -243,6 +245,7 @@ class Monster extends Sprite {
 
     this.currentExperience -= this.experienceToNextLevel;
     this.experienceToNextLevel = Math.floor(this.level ** 3);
+    this.leveledUp = true;
   }
 
   // Function for animating health number change

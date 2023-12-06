@@ -17,7 +17,7 @@ function hideNPCDialogue() {
   const dialogueElement = document.querySelector("#npcDialogue");
   dialogueElement.style.display = "none";
   interactingNPC = null; // Reset the interacting NPC
-};
+}
 
 // NPC Dialogue
 const npcDialogueTexts = {
@@ -440,7 +440,7 @@ function updateLeaderDialogue() {
       },
     ];
   }
-};
+}
 
 let currentDialogue = null;
 let currentLineIndex = 0;
@@ -459,7 +459,7 @@ function displayNPCDialogue(npcInstance) {
     currentDialogue = npcDialogueTexts[currentNPCKey];
     displayCurrentDialogue();
   }
-};
+}
 
 // Function to populate attacks for the monster ---------------------
 function populateMonsterAttacks(monsterInstance) {
@@ -467,7 +467,7 @@ function populateMonsterAttacks(monsterInstance) {
   monsterInstance.attacks.forEach((attack, index) => {
     attackButtons[index].innerHTML = attack.name;
   });
-};
+}
 
 // Function to handle game finished scenario -----------------------------
 function handleSuccess() {
@@ -484,7 +484,7 @@ function handleSuccess() {
     resetMMGame();
     finishedScreen.style.display = "none";
   });
-};
+}
 
 // Function to display the current dialogue line and options, as well as specific NPC situations --------------
 function displayCurrentDialogue() {
@@ -649,8 +649,8 @@ function displayCurrentDialogue() {
       dialogueElement.innerText = currentLine.line;
       optionsElement.innerHTML = ""; // Clear options when not present
     }
-  };
-};
+  }
+}
 
 // More NPC Dialogue functions ------------------------------------------------
 
@@ -659,7 +659,7 @@ function hideNPCDialogue() {
   dialogueElement.style.display = "none";
   currentDialogue = null;
   currentLineIndex = 0;
-};
+}
 
 document.querySelector("#npcDialogue").addEventListener("click", () => {
   if (currentDialogue && currentDialogue[currentLineIndex + 1]) {
@@ -924,7 +924,7 @@ function resetNPCDialogues() {
         ],
       },
     ]);
-};
+}
 
 // reset entire game ------------------------------------------------
 function resetMMGame() {
@@ -965,4 +965,4 @@ function resetMMGame() {
   player.party = [];
   const openingScreen = document.getElementById("openingScreen");
   openingScreen.style.display = "flex";
-};
+}
