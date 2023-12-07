@@ -1,16 +1,266 @@
 @charset "utf-8";
 
 html {
-    box-sizing: border-box;
-  }
+  box-sizing: border-box;
+}
 
-*, *:before, *:after {
-    box-sizing: inherit;
-    font-family: 'Press Start 2P', cursive;
-  }
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  font-family: "Press Start 2P", cursive;
+}
 
 body {
-    background-color: black;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ensure full viewport height */
+  margin: 0;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  background-color: white;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: rgb(217, 217, 217);
+}
+
+/* Controls Screen Styling */
+#controlsScreen {
+  display: none;
+  position: fixed;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 1024px;
+  height: 576px;
+  z-index: 100000;
+}
+
+#controlsContent {
+  text-align: center;
+  font-family: "Press Start 2P", cursive;
+  color: #000;
+}
+
+#controlsContent h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+#controlsContent p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+#closeControls {
+  margin-top: 20px;
+  padding: 8px 16px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 16px;
+  color: #fff;
+  background-color: #ff4040;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#closeControls:hover {
+  background-color: #d63030;
+}
+
+#openingScreen {
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 1024px;
+  height: 576px;
+  background-image: url("../images/Mavis-Island.png");
+  background-size: cover; /* Adjusts the size of the background image to cover the entire container */
+  background-position: center;
+}
+
+#openingScreen::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.4);
+  z-index: -1; /* Moves the overlay behind other content */
+}
+
+#openingScreen p {
+  font-size: 10px;
+}
+
+#openingScreen h1 {
+  font-size: 30px;
+}
+
+#openingHeader {
+  margin-bottom: 20px;
+}
+
+#nameInput {
+  text-align: center;
+}
+
+#nameForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+#playerName {
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+#startButton {
+  padding: 8px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 2px solid white;
+}
+
+#startButton:hover {
+  background-color: #45a049;
+}
+
+#controlButton {
+  padding: 8px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 2px solid white;
+}
+
+#controlButton:hover {
+  background-color: #45a049;
+}
+
+#monster-stats {
+  width: 1024px;
+  height: 576px;
+  background-color: #fff;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 99999;
+}
+
+#monster-stats .owner p {
+  margin: 0;
+}
+
+.monster-details {
+  display: flex;
+  width: 70%;
+  height: 50%;
+}
+
+.left-details {
+  flex: 1;
+  text-align: center;
+}
+
+.monster-header img {
+  width: 80px;
+  height: 80px;
+}
+
+.monster-header h1 {
+  margin: 5px 0;
+}
+
+.level p {
+  margin: 5px 0;
+}
+
+.right-details {
+  flex: 2;
+  padding-left: 20px;
+}
+
+#monster-stats .types p {
+  margin: 0;
+}
+
+#monster-stats .stats div {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #000;
+}
+
+#monster-stats .attacks ul {
+  list-style-type: none;
+  padding-left: 20px;
+  margin: 0;
+}
+
+#monster-stats .stats div p {
+  margin: 0;
+  width: 60px;
+  text-align: left;
+}
+
+#monster-stats .attacks p {
+  margin-bottom: 5px;
+}
+
+#healStatScreen {
+  margin-top: 20px;
+  padding: 8px 16px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 16px;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#healStatScreen:hover {
+  background-color: #45a049;
+}
+
+#closeStats {
+  margin-top: 20px;
+  padding: 8px 16px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 16px;
+  color: #fff;
+  background-color: #ff4040;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#closeStats:hover {
+  background-color: #d63030;
 }
 
 #gameScreen {
@@ -30,11 +280,169 @@ body {
   z-index: 10;
 }
 
+#gameOverScreen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border: 2px solid black;
+  background-color: white;
+  text-align: center;
+  display: none;
+  border-radius: 3px;
+  z-index: 9999;
+}
+
+#gameOverScreen h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+#gameOverScreen p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+#restartButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #919191;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 3px;
+}
+
+#restartButton:hover {
+  background-color: #37b929;
+}
+
+/* Controls Screen Styling */
+#finishedScreen {
+  display: none;
+  position: fixed;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 1024px;
+  height: 576px;
+  z-index: 100000;
+}
+
+#restartFinishedButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 3px;
+}
+
+#restartFinishedButton:hover {
+  background-color: #45a049;
+}
+
+.menu {
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  width: 215px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 999;
+  display: none;
+  border-radius: 3px;
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 6px;
+  background-color: #f5f5f5;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: border-color 0.3s;
+  border: 1px solid transparent;
+}
+
+.menu button:hover {
+  border-color: black; /* Changes the border color on hover */
+}
+
+.confirmation-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 9999; /* Ensure it appears above other elements */
+}
+
+.confirmation-box {
+  background-color: rgba(255, 255, 255);
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.confirmation-message {
+  margin-bottom: 20px;
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.confirmation-button {
+  margin: 0 10px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  outline: none;
+  width: 100px;
+}
+
+#npcDialogue {
+  background-color: white;
+  position: absolute;
+  display: none;
+  height: 125px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 10px;
+  border: 4px black solid;
+  z-index: 2;
+  padding: 12px;
+  cursor: pointer;
+}
+
+#npcOptions {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
 #userInterface {
   display: none;
 }
 
-#healthBar{
+#healthBar {
   position: relative;
 }
 
@@ -46,6 +454,11 @@ body {
   left: 50px;
   border: 4px black solid;
   padding: 12px;
+}
+
+#enemyTitleInfo {
+  display: flex;
+  justify-content: space-between;
 }
 
 #enemyBaseHealth {
@@ -74,6 +487,15 @@ body {
   padding: 12px;
 }
 
+#myTitleInfo {
+  display: flex;
+  justify-content: space-between;
+}
+
+#healthBar {
+  position: relative;
+}
+
 #myBaseHealth {
   height: 5px;
   background-color: grey;
@@ -90,6 +512,17 @@ body {
   width: 100%;
 }
 
+#myHealthNumbers {
+  padding-top: 5px;
+  float: right;
+  padding-right: 20px;
+}
+
+#myHealthStat,
+#MyTotalHealthStat {
+  display: inline-block; /* or inline-flex */
+}
+
 #battleMenu {
   background-color: white;
   position: absolute;
@@ -103,15 +536,15 @@ body {
   z-index: 2;
 }
 
-#battleQuestion{
-  flex: 1; 
-  display: flex; 
+#battleQuestion {
+  flex: 1;
+  display: flex;
   align-items: center;
   justify-content: center;
   border-right: 4px black solid;
 }
 
-#battleMenuButtons{
+#battleMenuButtons {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -146,24 +579,13 @@ h1 {
   margin: 0;
 }
 
-button {
-  border: none;
-  cursor: pointer;
-  background-color: white;
-  font-size: 16px;
-}
-
-button:hover {
-  background-color: rgb(217, 217, 217);
-}
-
-#attacks{
+#attacks {
   width: 66.66%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
 
-#attackType{
+#attackType {
   display: flex;
   align-items: center;
   justify-content: center;
