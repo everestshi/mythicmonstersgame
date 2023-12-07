@@ -262,8 +262,8 @@ let bridgeman = new NPC({
 //BoatCaptain sprite
 let boatCaptain = new NPC({
   position: {
-    x: canvas.width / 2 - 470,
-    y: canvas.height / 2 - 361,
+    x: canvas.width / 2 - 6000,
+    y: canvas.height / 2 - 6000,
   },
   image: npcBoatCaptainImage,
   srcX: 0,
@@ -278,8 +278,8 @@ let trainer1Monster = new Monster({ ...monsters.Pompet, level: 10 });
 //Trainer1 sprite
 let trainer1 = new NPC({
   position: {
-    x: canvas.width / 2 + 4710,
-    y: canvas.height / 2 - 612,
+    x: canvas.width / 2 - 6000,
+    y: canvas.height / 2 - 6000,
   },
   image: npcTrainerImage,
   srcX: (npcTrainerImage.width / 4) * 3,
@@ -296,8 +296,8 @@ let trainer2Monster = new Monster({ ...monsters.Dampurr, level: 10 });
 //Trainer2 sprite
 let trainer2 = new NPC({
   position: {
-    x: canvas.width / 2 + 2670,
-    y: canvas.height / 2 - 2406,
+    x: canvas.width / 2 - 6000,
+    y: canvas.height / 2 - 6000,
   },
   image: npcTrainerImage,
   srcX: (npcTrainerImage.width / 4) * 2,
@@ -314,8 +314,8 @@ let trainer3Monster = new Monster({ ...monsters.Bonfur, level: 10 });
 //Trainer3 sprite
 let trainer3 = new NPC({
   position: {
-    x: canvas.width / 2 + 4584,
-    y: canvas.height / 2 + 348,
+    x: canvas.width / 2 - 6000,
+    y: canvas.height / 2 - 6000,
   },
   image: npcTrainerImage,
   srcX: npcTrainerImage.width / 4,
@@ -915,20 +915,20 @@ function resetNPCPositions() {
   bridgeman.srcY = 0;
 
   // Reset Boat Captain's position
-  boatCaptain.position.x = canvas.width / 2 - 470;
-  boatCaptain.position.y = canvas.height / 2 - 361;
+  boatCaptain.position.x = canvas.width / 2 - 6000;
+  boatCaptain.position.y = canvas.height / 2 - 6000;
 
   // Reset Trainer1's position
-  trainer1.position.x = canvas.width / 2 + 4710;
-  trainer1.position.y = canvas.height / 2 - 612;
+  trainer1.position.x = canvas.width / 2 - 6000;
+  trainer1.position.y = canvas.height / 2 - 6000;
 
   // Reset Trainer2's position
-  trainer2.position.x = canvas.width / 2 + 2670;
-  trainer2.position.y = canvas.height / 2 - 2406;
+  trainer2.position.x = canvas.width / 2 - 6000;
+  trainer2.position.y = canvas.height / 2 - 6000;
 
   // Reset Trainer3's position
-  trainer3.position.x = canvas.width / 2 + 4584;
-  trainer3.position.y = canvas.height / 2 + 348;
+  trainer3.position.x = canvas.width / 2 - 6000;
+  trainer3.position.y = canvas.height / 2 - 6000;
 }
 
 function resetBattleZones() {
@@ -975,7 +975,7 @@ function showConfirmationScreen() {
 
 // Event listener for 'Yes' button click
 document.getElementById("yesButton").addEventListener("click", function () {
-    toggleMenu();
+  toggleMenu();
   resetMMGame(); // Reset the game when 'Yes' is clicked
   const confirmationScreen = document.getElementById("confirmationScreen");
   confirmationScreen.style.display = "none"; // Hide the confirmation screen

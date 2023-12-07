@@ -13,6 +13,11 @@ html {
 
 body {
   background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ensure full viewport height */
+  margin: 0;
 }
 
 button {
@@ -81,10 +86,28 @@ button:hover {
   background-color: white;
   width: 1024px;
   height: 576px;
+  background-image: url("../images/Mavis-Island.png");
+  background-size: cover; /* Adjusts the size of the background image to cover the entire container */
+  background-position: center;
+}
+
+#openingScreen::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.4);
+  z-index: -1; /* Moves the overlay behind other content */
 }
 
 #openingScreen p {
   font-size: 10px;
+}
+
+#openingScreen h1 {
+  font-size: 30px;
 }
 
 #openingHeader {
@@ -114,6 +137,7 @@ button:hover {
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  border: 2px solid white;
 }
 
 #startButton:hover {
@@ -127,6 +151,7 @@ button:hover {
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  border: 2px solid white;
 }
 
 #controlButton:hover {
@@ -325,6 +350,7 @@ button:hover {
 .menu {
   position: absolute;
   top: 50px;
+  left: 10px;
   width: 215px;
   background-color: #fff;
   border: 1px solid #ccc;

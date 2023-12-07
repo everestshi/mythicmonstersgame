@@ -505,6 +505,8 @@ function displayCurrentDialogue() {
           if (currentNPCKey === "professor") {
             if (option.text === "Yes") {
               game.endGame = true;
+              boatCaptain.position.x += 5530;
+              boatCaptain.position.y += 5639;
             } else if (option.text === "No") {
             } else {
               const monsterName = option.text;
@@ -529,6 +531,14 @@ function displayCurrentDialogue() {
             }
           } else if (currentNPCKey === "leader" && option.text === "Yes") {
             game.setAcceptedChallenge(true);
+            trainer1.position.x += 10710;
+            trainer1.position.y += 5388;
+
+            trainer2.position.x += 8670;
+            trainer2.position.y += 3594;
+
+            trainer3.position.x += 10584;
+            trainer3.position.y += 6348;
             updateLeaderDialogue();
           } else if (currentNPCKey === "trainer1" && option.text === "Yes") {
             window.cancelAnimationFrame(animationId);
