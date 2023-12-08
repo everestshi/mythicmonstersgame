@@ -71,7 +71,7 @@ const attacks = {
   },
   MegaLightball: {
     name: "MegaLightball",
-    damage: 300,
+    damage: 80,
     type: "Light",
   },
   ShadowStrike: {
@@ -81,7 +81,7 @@ const attacks = {
   },
   DescendingDark: {
     name: "DescendingDark",
-    damage: 300,
+    damage: 100,
     type: "Dark",
   },
   ShadeClaw: {
